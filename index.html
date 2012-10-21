@@ -28,7 +28,25 @@
       }
       .tag-4 {
         font-size: 8pt;
-     }
+      }
+      .article-headline {
+        background-color: yellow;
+      }
+
+      .article > h1 {
+          font-size: 2.4em;
+          border-left: 4px solid gray;
+          margin-bottom: 8px;
+          padding-left: 4px;
+      }
+
+      .content > h1 { font-size: 1.5em; }
+      .content > h2 { font-size: 1.3em; }
+      .content > h3 { font-size: 1.1em; }
+      .content > h4 { font-size: 0.9em; }
+      .content > h5 { font-size: 0.7em; }
+
+
     </style>
     <link href="./theme/css/bootstrap-responsive.min.css" rel="stylesheet">
         <link href="./theme/css/font-awesome.css" rel="stylesheet">
@@ -113,15 +131,14 @@
 
 -->
 
-<!--
-<span class="label">Category</span>
-<a href="./category/geeky.html"><i class="icon-folder-open"></i>geeky</a>.
--->
-
-
 
 
 <div class="pull-right">
+  <span class="label">Category</span>
+  <a href="./category/geeky.html"><i class="icon-folder-open"></i>geeky</a>.
+
+
+  &nbsp;&nbsp;&nbsp;
   <span class="label">Tags</span>
   
     <a href="./tag/pelican.html"><i class="icon-tag">&nbsp;</i>pelican</a>&nbsp;&nbsp;
@@ -132,22 +149,22 @@
   
     <a href="./tag/github.html"><i class="icon-tag">&nbsp;</i>github</a>&nbsp;&nbsp;
   
+
 </div>
 
 
 </footer><!-- /.post-info --></div>
                 <div class="content"><p>After going back and forth to what technology I wanted behind my blog I decided on;</p>
-<h2><a href="http://blog.getpelican.com/">Pelican</a> as the static blog generator</h2>
+<h1><a href="http://blog.getpelican.com/">Pelican</a> as the static blog generator</h1>
 <p>Pelican is written in python, is very extendible with plugins and easy to create themes.
 It is also easy to configure and use. The main reason I went with pelican is its simplicity, and possibility to customize.</p>
 <p>There is already other blogs out there that explains <a href="http://blog.aclark.net/yes-this-blog-is-now-powered-by-pelican.html">pelican advantages and disadvantages</a> and other blogs that have info about <a href="http://martinbrochhaus.com/2012/02/pelican.html">using github pages and pelican</a>, so that is not something I will spend time on here. But if you like to blog using plain-text, python, html/js/css customization and a power full generator to put it into a blog, pelican might be something to check out.</p>
-<h2><a href="http://fletcherpenney.net/multimarkdown/">Multimarkdown</a> as the writing "format"</h2>
+<h1><a href="http://fletcherpenney.net/multimarkdown/">Multimarkdown</a> as the writing "format"</h1>
 <p>Multimarkdown is an extension to <a href="http://daringfireball.net/projects/markdown/">markdown</a>. Markdown is a structured way of writing articles, snippets, mail or even whole books. It was created as a way to write plaintext which can later be converted to html/pdf/odt/LaTeX or whatever you want, keeping the structure you want.</p>
 <p>To be honest, everyone who sends mail on a daily bases should at least look into this. Or at least thing about it. Getting mails that contains a lot of text, and no structure is painful to read.</p>
 <p>When it comes to Markdown vs. <a href="http://docutils.sourceforge.net/rst.html">reStructuredText</a>, I ended up with markdown because it feels much bigger than rst. Even tough rst is something which the python community uses a lot, it just feels a little dead. I have even tried to use rst for a long time, but it is missing some love from other people.</p>
-<h2><a href="http://pages.github.com/">Github pages</a> for hosting the generated html files</h2>
-<p>I love using Github for <a href="https://github.com/xeor/">my opensourced projects</a>, so it felt very natural to use their pages to store the html files for my blog. It is free, easy to publish to, and stable. I don't really have much more to say on this. But if my blog was not going to be a bunch of static files, I would probably have used <a href="http://www.heroku.com/">Heroku</a>.</p>
-                </div>
+<h1><a href="http://pages.github.com/">Github pages</a> for hosting the generated html files</h1>
+<p>I love using Github for <a href="https://github.com/xeor/">my opensourced projects</a>, so it felt very natural to use their pages to store the html files for my blog. It is free, easy to publish to, and stable. I don't really have much more to say on this. But if my blog was not going to be a bunch of static files, I would probably have used <a href="http://www.heroku.com/">Heroku</a>.</p></div>
         </div>
         <hr />
         
@@ -166,19 +183,19 @@ It is also easy to configure and use. The main reason I went with pelican is its
 
 -->
 
-<!--
-<span class="label">Category</span>
-<a href="./category/misc.html"><i class="icon-folder-open"></i>misc</a>.
--->
-
-
 
 
 <div class="pull-right">
+  <span class="label">Category</span>
+  <a href="./category/misc.html"><i class="icon-folder-open"></i>misc</a>.
+
+
+  &nbsp;&nbsp;&nbsp;
   <span class="label">Tags</span>
   
     <a href="./tag/blog.html"><i class="icon-tag">&nbsp;</i>blog</a>&nbsp;&nbsp;
   
+
 </div>
 
 
@@ -198,8 +215,7 @@ It is also easy to configure and use. The main reason I went with pelican is its
 <li>Two things usually makes me happy when I try to figure out a problem using Google. And that is finding a <a href="http://stackoverflow.com/">stackoverflow</a> post, or a blog post. As I already am <a href="http://stackoverflow.com/users/452081/xeor">contributing to stackoverflow</a>, I figured out a blog will also be nice to have.</li>
 </ul>
 <p>Most of the stuff I am going to write about will be in the very geeky genre. All the geeky goodness will be in the <em>geeky</em> category. There will also be a <em>priv</em> and <em>misc</em> category. But not many more.</p>
-<p>All tags and categories will have its own ATOM feeds as well.</p>
-                </div>
+<p>All tags and categories will have its own ATOM feeds as well.</p></div>
         </div>
         <hr />
         
@@ -251,19 +267,19 @@ It is also easy to configure and use. The main reason I went with pelican is its
 <ul class="nav nav-list">
 <li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
 
+    <span class="tag-4"><a href="./tag/git.html">git</a>&nbsp;&nbsp;</span>
+
+
     <span class="tag-4"><a href="./tag/pelican.html">pelican</a>&nbsp;&nbsp;</span>
 
 
     <span class="tag-4"><a href="./tag/blog.html">blog</a>&nbsp;&nbsp;</span>
 
 
-    <span class="tag-4"><a href="./tag/git.html">git</a>&nbsp;&nbsp;</span>
+    <span class="tag-4"><a href="./tag/python.html">python</a>&nbsp;&nbsp;</span>
 
 
     <span class="tag-4"><a href="./tag/github.html">github</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-4"><a href="./tag/python.html">python</a>&nbsp;&nbsp;</span>
 
 
 </ul></div>

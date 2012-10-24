@@ -51,7 +51,8 @@
     <link href=".././theme/css/bootstrap-responsive.min.css" rel="stylesheet">
         <link href=".././theme/css/font-awesome.css" rel="stylesheet">
 
-    <link href=".././theme/css/pygments.css" rel="stylesheet">
+    
+    <link href=".././theme/css/pygments-emacs.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -101,11 +102,9 @@
 					</a>
                   </li>
               
-
                           <ul class="nav pull-right">
                                 <li><a href=".././archives.html"><i class="icon-th-list"></i>Archives</a></li>
                           </ul>
-
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -117,6 +116,131 @@
         <div class="span9" id="content">
             
 
+        
+        <div class="article">
+                <h1><a href=".././2012/10/python-threading-example-creating-pingerpy.html">Python threading example, creating Pinger.py</a></h1>
+                <div class="well small"><footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2012-10-24T23:00:00">
+        <i class="icon-calendar">&nbsp;</i>Wed 24 October 2012
+</abbr>
+
+<!--
+
+<span class="label">By</span>
+<a href=".././author/lars-solberg.html"><i class="icon-user"></i>Lars Solberg</a>
+
+-->
+
+
+
+<div class="pull-right">
+  <span class="label">Category</span>
+  <a href=".././category/geeky.html"><i class="icon-folder-open"></i>geeky</a>.
+
+
+  &nbsp;&nbsp;&nbsp;
+  <span class="label">Tags</span>
+  
+    <a href=".././tag/python.html"><i class="icon-tag">&nbsp;</i>python</a>&nbsp;&nbsp;
+  
+    <a href=".././tag/network.html"><i class="icon-tag">&nbsp;</i>network</a>&nbsp;&nbsp;
+  
+
+</div>
+
+
+</footer><!-- /.post-info --></div>
+                <div class="content"><p><a href="http://docs.python.org/library/threading.html">Threading</a> in Python can be confusing in the beginning. Many examples out there are overly complicated so here is another example that I have tried to keep simple.</p>
+<p>Here, I want a fast way to ping every host/ip in a list. As fast as we can, threaded, and then at last return a dict with two items. A list of dead nodes, and a list of nodes who answers on ping.</p>
+<p>Example:</p>
+<div class="codehilite"><pre><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">pinger</span> <span class="kn">import</span> <span class="n">Pinger</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">ping</span> <span class="o">=</span> <span class="n">Pinger</span><span class="p">()</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">ping</span><span class="o">.</span><span class="n">thread_count</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">ping</span><span class="o">.</span><span class="n">hosts</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;10.0.0.1&#39;</span><span class="p">,</span> <span class="s">&#39;10.0.0.255&#39;</span><span class="p">,</span> <span class="s">&#39;10.0.0.100&#39;</span><span class="p">,</span> <span class="s">&#39;google.com&#39;</span><span class="p">,</span> <span class="s">&#39;nonexisting&#39;</span><span class="p">,</span> <span class="s">&#39;*not able to ping!*&#39;</span><span class="p">,</span> <span class="s">&#39;8.8.8.8&#39;</span><span class="p">]</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">ping</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> 
+<span class="p">{</span><span class="s">&#39;alive&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;10.0.0.255&#39;</span><span class="p">,</span> <span class="s">&#39;10.0.0.1&#39;</span><span class="p">,</span> <span class="s">&#39;google.com&#39;</span><span class="p">,</span> <span class="s">&#39;8.8.8.8&#39;</span><span class="p">],</span>
+ <span class="s">&#39;dead&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;*not able to ping!*&#39;</span><span class="p">,</span> <span class="s">&#39;nonexisting&#39;</span><span class="p">,</span> <span class="s">&#39;10.0.0.100&#39;</span><span class="p">]}</span>
+</pre></div>
+
+
+<p>The example above will ping 8 hosts at the time and saving the results to the end.
+We are using 8 thread_count in this example. This number should not be higher than the total amount of cpu cores on your computer!</p>
+<p>The whole source of the Pinger class looks like this, read the comments and you will see how it works:</p>
+<div class="codehilite"><pre><span class="c">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="k">class</span> <span class="nc">Pinger</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;alive&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s">&#39;dead&#39;</span><span class="p">:</span> <span class="p">[]}</span> <span class="c"># Populated while we are running</span>
+    <span class="n">hosts</span> <span class="o">=</span> <span class="p">[]</span> <span class="c"># List of all hosts/ips in our input queue</span>
+
+    <span class="c"># How many ping process at the time.</span>
+    <span class="c"># Not higher than the total amounts of CPU cores you have!</span>
+    <span class="n">thread_count</span> <span class="o">=</span> <span class="mi">4</span>
+
+    <span class="c"># Lock object to help the cores not tramping on each other toes..</span>
+    <span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">ping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ip</span><span class="p">):</span>
+        <span class="c"># Use the system ping command with count of 1 and wait time of 1.</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s">&#39;ping&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="s">&#39;1&#39;</span><span class="p">,</span> <span class="s">&#39;-W&#39;</span><span class="p">,</span> <span class="s">&#39;1&#39;</span><span class="p">,</span> <span class="n">ip</span><span class="p">],</span>
+                              <span class="n">stdout</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s">&#39;/dev/null&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">),</span> <span class="n">stderr</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s">&#39;/dev/null&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">ret</span> <span class="o">==</span> <span class="mi">0</span> <span class="c"># Return True if our ping command succeeds</span>
+
+    <span class="k">def</span> <span class="nf">pop_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ip</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span> <span class="c"># Grab or wait+grab the lock.</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hosts</span><span class="p">:</span>
+            <span class="n">ip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hosts</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span> <span class="c"># Release the lock, so another core could grab it.</span>
+
+        <span class="k">return</span> <span class="n">ip</span>
+
+    <span class="k">def</span> <span class="nf">dequeue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">ip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pop_queue</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ip</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">None</span>
+
+            <span class="n">result</span> <span class="o">=</span> <span class="s">&#39;alive&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ping</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> <span class="k">else</span> <span class="s">&#39;dead&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="n">result</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">threads</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thread_count</span><span class="p">):</span>
+            <span class="c"># Create self.thread_count number of threads that together will</span>
+            <span class="c"># cooperate removing every ip in the list. Each thread will do the</span>
+            <span class="c"># job as fast as it can.</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dequeue</span><span class="p">)</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="c"># Wait until all the threads are done. .join() is blocking.</span>
+        <span class="p">[</span> <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span> <span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">ping</span> <span class="o">=</span> <span class="n">Pinger</span><span class="p">()</span>
+    <span class="n">ping</span><span class="o">.</span><span class="n">thread_count</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">ping</span><span class="o">.</span><span class="n">hosts</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s">&#39;10.0.0.1&#39;</span><span class="p">,</span> <span class="s">&#39;10.0.0.2&#39;</span><span class="p">,</span> <span class="s">&#39;10.0.0.3&#39;</span><span class="p">,</span> <span class="s">&#39;10.0.0.4&#39;</span><span class="p">,</span> <span class="s">&#39;10.0.0.0&#39;</span><span class="p">,</span> <span class="s">&#39;10.0.0.255&#39;</span><span class="p">,</span> <span class="s">&#39;10.0.0.100&#39;</span><span class="p">,</span>
+        <span class="s">&#39;google.com&#39;</span><span class="p">,</span> <span class="s">&#39;github.com&#39;</span><span class="p">,</span> <span class="s">&#39;nonexisting&#39;</span><span class="p">,</span> <span class="s">&#39;127.0.1.2&#39;</span><span class="p">,</span> <span class="s">&#39;*not able to ping!*&#39;</span><span class="p">,</span> <span class="s">&#39;8.8.8.8&#39;</span>
+        <span class="p">]</span>
+
+    <span class="k">print</span> <span class="n">ping</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div></div>
+        </div>
+        <hr />
         
         <div class="article">
                 <h1><a href=".././2012/10/blog-technology.html">Blog technology</a></h1>
@@ -221,16 +345,19 @@ It is also easy to configure and use. The main reason I went with pelican is its
     <span class="tag-4"><a href=".././tag/git.html">git</a>&nbsp;&nbsp;</span>
 
 
+    <span class="tag-4"><a href=".././tag/network.html">network</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-1"><a href=".././tag/python.html">python</a>&nbsp;&nbsp;</span>
+
+
     <span class="tag-4"><a href=".././tag/pelican.html">pelican</a>&nbsp;&nbsp;</span>
 
 
-    <span class="tag-4"><a href=".././tag/blog.html">blog</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-4"><a href=".././tag/python.html">python</a>&nbsp;&nbsp;</span>
-
-
     <span class="tag-4"><a href=".././tag/github.html">github</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/blog.html">blog</a>&nbsp;&nbsp;</span>
 
 
 </ul></div>

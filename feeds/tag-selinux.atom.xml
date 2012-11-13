@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Boa Blog</title><link href="http://blog.boa.nu/" rel="alternate"></link><link href="http://blog.boa.nu/feeds/tag-selinux.atom.xml" rel="self"></link><id>http://blog.boa.nu/</id><updated>2012-11-13T12:00:00+01:00</updated><entry><title>SELinux - Finding info</title><link href="http://blog.boa.nu/2012/11/selinux-finding-info.html" rel="alternate"></link><updated>2012-11-13T12:00:00+01:00</updated><author><name>Lars Solberg</name></author><id>tag:blog.boa.nu,2012-11-13:2012/11/selinux-finding-info.html</id><summary type="html">&lt;p&gt;If you look around the interwebs for &lt;a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux"&gt;SELinux&lt;/a&gt; information you will probably look around for a while and after some hours you will ask yourself why most of it is from 2006.
+To be honest, I really don't know. But if you think SELinux is dead because of this, think again. SELinux is very much alive. But one reason might be that SELinux is really stable and have proven so over a long time. That is why my theory is that it is more of less, done. There is no need to add features, its not needed.
+That being said, having a nice interface to write SELinux policies in will be more than welcome.&lt;/p&gt;
+&lt;p&gt;I will write a couple of blog articles from time to time about SELinux. So this entry is just to show you where I have found different information, and why I looked for exactly that info.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://billauer.co.il/selinux-policy-module-howto.html"&gt;Eli Billauer&lt;/a&gt; have a really great blog post about creating SELinux policies. Read it!&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://danwalsh.livejournal.com/"&gt;danwalsh blog&lt;/a&gt; is a blog by Dan Walsh mostly about SELinux stuff.&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://oss.tresys.com/docs/refpolicy/api/"&gt;tresys refpolicy api&lt;/a&gt; is at the one and only reference guide.&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://oss.tresys.com/docs/refpolicy/api/kernel_files.html"&gt;tresys refpolicy kernel files&lt;/a&gt; is a list of interfaces mostly used. Like file_types(), and its siblings. You can't really create policy modules without them as they define how your file/socket * whatever should act as. Deserves its own mention.&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://oss.tresys.com/projects/refpolicy"&gt;tresys refpolicy&lt;/a&gt; is a reference policy you can download.&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://oss.tresys.com/projects/slide"&gt;tresys slide&lt;/a&gt; looks like a promising IDE. Is last updated in 2009 or something..&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.nsa.gov/research/selinux/docs.shtml"&gt;nsa docs&lt;/a&gt; is a list of resources.&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.nsa.gov/research/_files/selinux/papers/policy2/x109.shtml"&gt;nsa policy language&lt;/a&gt; is one of the very few places you can actually get a list of available policy module macros.&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://fedoraproject.org/wiki/SELinux/PolicyGenTools"&gt;fedora policygentools&lt;/a&gt; a list of some tools to help you create policies. Mostly old stuff.&lt;/li&gt;
+&lt;/ul&gt;</summary><category term="linux"></category><category term="selinux"></category></entry></feed>

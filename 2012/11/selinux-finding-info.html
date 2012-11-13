@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Another blog is born</title>
+    <title>SELinux - Finding info</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Lars Solberg">
@@ -82,7 +82,7 @@
 
     <link href="../.././feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="/blog/" />
     
-      <link href="../.././feeds/category-misc.atom.xml" type="application/atom+xml" rel="alternate" title="/blog/category/misc" />
+      <link href="../.././feeds/category-geeky.atom.xml" type="application/atom+xml" rel="alternate" title="/blog/category/geeky" />
     
     
   </head>
@@ -105,13 +105,13 @@
                           <li class="divider-vertical"></li>
               
               
-                  <li >
+                  <li class="active">
                     <a href="../.././category/geeky.html">
 						<i class="icon-folder-open icon-large"></i>geeky
 					</a>
                   </li>
               
-                  <li class="active">
+                  <li >
                     <a href="../.././category/misc.html">
 						<i class="icon-folder-open icon-large"></i>misc
 					</a>
@@ -136,8 +136,8 @@
                         <h1>
                                 <a href=""
                                         rel="bookmark"
-                                        title="Permalink to Another blog is born">
-                                        Another blog is born
+                                        title="Permalink to SELinux - Finding info">
+                                        SELinux - Finding info
                                 </a>
                                 
                         </h1>
@@ -146,8 +146,8 @@
                 <div class="well">
                         <footer class="post-info">
 <span class="label">Date</span>
-<abbr class="published" title="2012-10-21T00:00:00">
-        <i class="icon-calendar">&nbsp;</i>Sun 21 October 2012
+<abbr class="published" title="2012-11-13T12:00:00">
+        <i class="icon-calendar">&nbsp;</i>Tue 13 November 2012
 </abbr>
 
 <!--
@@ -161,13 +161,15 @@
 
 <div class="pull-right">
   <span class="label">Category</span>
-  <a href="../.././category/misc.html"><i class="icon-folder-open"></i>misc</a>.
+  <a href="../.././category/geeky.html"><i class="icon-folder-open"></i>geeky</a>.
 
 
   &nbsp;&nbsp;&nbsp;
   <span class="label">Tags</span>
   
-    <a href="../.././tag/blog.html"><i class="icon-tag">&nbsp;</i>blog</a>&nbsp;&nbsp;
+    <a href="../.././tag/linux.html"><i class="icon-tag">&nbsp;</i>linux</a>&nbsp;&nbsp;
+  
+    <a href="../.././tag/selinux.html"><i class="icon-tag">&nbsp;</i>selinux</a>&nbsp;&nbsp;
   
 
 </div>
@@ -175,29 +177,28 @@
 
 </footer><!-- /.post-info -->
                 </div>
-                <p>When I am starting a new blog in late 2012, I feel like I am a little too late. But there is several reasons I haven't started blogging before now.</p>
+                <p>If you look around the interwebs for <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> information you will probably look around for a while and after some hours you will ask yourself why most of it is from 2006.
+To be honest, I really don't know. But if you think SELinux is dead because of this, think again. SELinux is very much alive. But one reason might be that SELinux is really stable and have proven so over a long time. That is why my theory is that it is more of less, done. There is no need to add features, its not needed.
+That being said, having a nice interface to write SELinux policies in will be more than welcome.</p>
+<p>I will write a couple of blog articles from time to time about SELinux. So this entry is just to show you where I have found different information, and why I looked for exactly that info.</p>
 <ul>
-<li>I don't think anyone really cares about my day to day stuff, so why write about it..?</li>
-<li>I think it is more exiting to work on my own projects than writing about them.</li>
-<li>I don't want to use a lot of time writing something when I lock my writing down deep inside a database.</li>
-<li>I've always felt like it is too late to start writing a blog. No kidding, I have had that feeling since 2003.</li>
+<li><a href="http://billauer.co.il/selinux-policy-module-howto.html">Eli Billauer</a> have a really great blog post about creating SELinux policies. Read it!</li>
+<li><a href="http://danwalsh.livejournal.com/">danwalsh blog</a> is a blog by Dan Walsh mostly about SELinux stuff.</li>
+<li><a href="http://oss.tresys.com/docs/refpolicy/api/">tresys refpolicy api</a> is at the one and only reference guide.</li>
+<li><a href="http://oss.tresys.com/docs/refpolicy/api/kernel_files.html">tresys refpolicy kernel files</a> is a list of interfaces mostly used. Like file_types(), and its siblings. You can't really create policy modules without them as they define how your file/socket * whatever should act as. Deserves its own mention.</li>
+<li><a href="http://oss.tresys.com/projects/refpolicy">tresys refpolicy</a> is a reference policy you can download.</li>
+<li><a href="http://oss.tresys.com/projects/slide">tresys slide</a> looks like a promising IDE. Is last updated in 2009 or something..</li>
+<li><a href="http://www.nsa.gov/research/selinux/docs.shtml">nsa docs</a> is a list of resources.</li>
+<li><a href="http://www.nsa.gov/research/_files/selinux/papers/policy2/x109.shtml">nsa policy language</a> is one of the very few places you can actually get a list of available policy module macros.</li>
+<li><a href="http://fedoraproject.org/wiki/SELinux/PolicyGenTools">fedora policygentools</a> a list of some tools to help you create policies. Mostly old stuff.</li>
 </ul>
-<p>So, the reason I will try to write a couple of blog articles from time to time now is:</p>
-<ul>
-<li>My <em>blog</em> project on my todo list have been inactive for too long now. I want those todo's out of my head :)</li>
-<li>I want a personal place I can lookup my own projects. I really want a good place to document problems. Because of that, this blog will be more of an polished notebook for me.</li>
-<li>I think it is time to learn myself more <a href="http://daringfireball.net/projects/markdown/">markdown</a> Hell, everyone should learn some markdown! And/or <a href="http://fletcherpenney.net/multimarkdown/">multimarkdown</a>.</li>
-<li>Two things usually makes me happy when I try to figure out a problem using Google. And that is finding a <a href="http://stackoverflow.com/">stackoverflow</a> post, or a blog post. As I already am <a href="http://stackoverflow.com/users/452081/xeor">contributing to stackoverflow</a>, I figured out a blog will also be nice to have.</li>
-</ul>
-<p>Most of the stuff I am going to write about will be in the very geeky genre. All the geeky goodness will be in the <em>geeky</em> category. There will also be a <em>priv</em> and <em>misc</em> category. But not many more.</p>
-<p>All tags and categories will have its own ATOM feeds as well.</p>
                 </div><!-- /.entry-content -->
                 
                 <div class="comments">
                 <h2>Comments !</h2>
                         <div id="disqus_thread"></div>
                         <script type="text/javascript">
-                           var disqus_identifier = "2012/10/another-blog-is-born.html";
+                           var disqus_identifier = "2012/11/selinux-finding-info.html";
                            (function() {
                                 var dsq = document.createElement('script');
                                 dsq.type = 'text/javascript'; dsq.async = true;

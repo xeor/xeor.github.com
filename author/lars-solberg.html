@@ -35,14 +35,14 @@
         border-right-style: solid;
       }
       .article-odd {
-        border-left-color: #AFA;
-        border-right-color: #AFA;
-        border-top-color: #AFA;
+        border-left-color: #CCC;
+        border-right-color: #CCC;
+        border-top-color: #CCC;
       }
       .article-even {
-        border-left-color: #AAF;
-        border-right-color: #AAF;
-        border-top-color: #AAF;
+        border-left-color: #444;
+        border-right-color: #444;
+        border-top-color: #444;
       }
 
       .article > h1 {
@@ -361,6 +361,59 @@ We are using 8 thread_count in this example. This number should not be higher th
         </div>
         <hr />
         
+        
+        <div class="article article-even">
+                <h1 class="article-even"><a href=".././2012/11/selinux-finding-info.html">SELinux - Finding info</a></h1>
+                <div class="well small"><footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2012-11-13T12:00:00">
+        <i class="icon-calendar">&nbsp;</i>Tue 13 November 2012
+</abbr>
+
+<!--
+
+<span class="label">By</span>
+<a href=".././author/lars-solberg.html"><i class="icon-user"></i>Lars Solberg</a>
+
+-->
+
+
+
+<div class="pull-right">
+  <span class="label">Category</span>
+  <a href=".././category/geeky.html"><i class="icon-folder-open"></i>geeky</a>.
+
+
+  &nbsp;&nbsp;&nbsp;
+  <span class="label">Tags</span>
+  
+    <a href=".././tag/linux.html"><i class="icon-tag">&nbsp;</i>linux</a>&nbsp;&nbsp;
+  
+    <a href=".././tag/selinux.html"><i class="icon-tag">&nbsp;</i>selinux</a>&nbsp;&nbsp;
+  
+
+</div>
+
+
+</footer><!-- /.post-info --></div>
+                <div class="content"><p>If you look around the interwebs for <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> information you will probably look around for a while and after some hours you will ask yourself why most of it is from 2006.
+To be honest, I really don't know. But if you think SELinux is dead because of this, think again. SELinux is very much alive. But one reason might be that SELinux is really stable and have proven so over a long time. That is why my theory is that it is more of less, done. There is no need to add features, its not needed.
+That being said, having a nice interface to write SELinux policies in will be more than welcome.</p>
+<p>I will write a couple of blog articles from time to time about SELinux. So this entry is just to show you where I have found different information, and why I looked for exactly that info.</p>
+<ul>
+<li><a href="http://billauer.co.il/selinux-policy-module-howto.html">Eli Billauer</a> have a really great blog post about creating SELinux policies. Read it!</li>
+<li><a href="http://danwalsh.livejournal.com/">danwalsh blog</a> is a blog by Dan Walsh mostly about SELinux stuff.</li>
+<li><a href="http://oss.tresys.com/docs/refpolicy/api/">tresys refpolicy api</a> is at the one and only reference guide.</li>
+<li><a href="http://oss.tresys.com/docs/refpolicy/api/kernel_files.html">tresys refpolicy kernel files</a> is a list of interfaces mostly used. Like file_types(), and its siblings. You can't really create policy modules without them as they define how your file/socket * whatever should act as. Deserves its own mention.</li>
+<li><a href="http://oss.tresys.com/projects/refpolicy">tresys refpolicy</a> is a reference policy you can download.</li>
+<li><a href="http://oss.tresys.com/projects/slide">tresys slide</a> looks like a promising IDE. Is last updated in 2009 or something..</li>
+<li><a href="http://www.nsa.gov/research/selinux/docs.shtml">nsa docs</a> is a list of resources.</li>
+<li><a href="http://www.nsa.gov/research/_files/selinux/papers/policy2/x109.shtml">nsa policy language</a> is one of the very few places you can actually get a list of available policy module macros.</li>
+<li><a href="http://fedoraproject.org/wiki/SELinux/PolicyGenTools">fedora policygentools</a> a list of some tools to help you create policies. Mostly old stuff.</li>
+</ul></div>
+        </div>
+        <hr />
+        
 
 
 
@@ -409,22 +462,28 @@ We are using 8 thread_count in this example. This number should not be higher th
 <ul class="nav nav-list">
 <li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
 
-    <span class="tag-4"><a href=".././tag/pelican.html">pelican</a>&nbsp;&nbsp;</span>
-
-
     <span class="tag-4"><a href=".././tag/git.html">git</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-1"><a href=".././tag/python.html">python</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-4"><a href=".././tag/blog.html">blog</a>&nbsp;&nbsp;</span>
 
 
     <span class="tag-4"><a href=".././tag/network.html">network</a>&nbsp;&nbsp;</span>
 
 
+    <span class="tag-4"><a href=".././tag/linux.html">linux</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/blog.html">blog</a>&nbsp;&nbsp;</span>
+
+
     <span class="tag-4"><a href=".././tag/github.html">github</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-1"><a href=".././tag/python.html">python</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/selinux.html">selinux</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/pelican.html">pelican</a>&nbsp;&nbsp;</span>
 
 
 </ul></div>
@@ -439,6 +498,28 @@ We are using 8 thread_count in this example. This number should not be higher th
     <li><a href="http://no.linkedin.com/in/lsolberg"><i class="icon-linkedin-sign icon-large"></i>linkedin</a></li>
 
 </ul></div>
+
+
+
+
+
+<div class="well sidebar-nav" id="sidebar-articles">
+<ul class="nav nav-list">
+
+    <li class="nav-header"><h4><i class="icon-pushpin icon-large"></i> articles on page</h4></li>
+
+
+    <li><a href=".././2012/10/another-blog-is-born.html">Another blog is born</a></li>
+
+    <li><a href=".././2012/10/blog-technology.html">Blog technology</a></li>
+
+    <li><a href=".././2012/10/python-threading-example-creating-pingerpy.html">Python threading example, creating Pinger.py</a></li>
+
+    <li><a href=".././2012/11/selinux-finding-info.html">SELinux - Finding info</a></li>
+
+</ul></div>
+
+
 
 
 

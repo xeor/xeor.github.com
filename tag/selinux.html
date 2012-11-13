@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Boa Blog - github</title>
+    <title>Boa Blog - selinux</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Lars Solberg">
@@ -83,7 +83,7 @@
     <link href=".././feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="/blog/" />
     
     
-      <link href=".././feeds/tag-github.atom.xml" type="application/atom+xml" rel="alternate" title="/blog/tag/github" />
+      <link href=".././feeds/tag-selinux.atom.xml" type="application/atom+xml" rel="alternate" title="/blog/tag/selinux" />
     
   </head>
 
@@ -134,11 +134,11 @@
         
         
         <div class="article article-odd">
-                <h1 class="article-odd"><a href=".././2012/10/blog-technology.html">Blog technology</a></h1>
+                <h1 class="article-odd"><a href=".././2012/11/selinux-finding-info.html">SELinux - Finding info</a></h1>
                 <div class="well small"><footer class="post-info">
 <span class="label">Date</span>
-<abbr class="published" title="2012-10-21T20:00:00">
-        <i class="icon-calendar">&nbsp;</i>Sun 21 October 2012
+<abbr class="published" title="2012-11-13T12:00:00">
+        <i class="icon-calendar">&nbsp;</i>Tue 13 November 2012
 </abbr>
 
 <!--
@@ -158,30 +158,30 @@
   &nbsp;&nbsp;&nbsp;
   <span class="label">Tags</span>
   
-    <a href=".././tag/pelican.html"><i class="icon-tag">&nbsp;</i>pelican</a>&nbsp;&nbsp;
+    <a href=".././tag/linux.html"><i class="icon-tag">&nbsp;</i>linux</a>&nbsp;&nbsp;
   
-    <a href=".././tag/python.html"><i class="icon-tag">&nbsp;</i>python</a>&nbsp;&nbsp;
-  
-    <a href=".././tag/git.html"><i class="icon-tag">&nbsp;</i>git</a>&nbsp;&nbsp;
-  
-    <a href=".././tag/github.html"><i class="icon-tag">&nbsp;</i>github</a>&nbsp;&nbsp;
+    <a href=".././tag/selinux.html"><i class="icon-tag">&nbsp;</i>selinux</a>&nbsp;&nbsp;
   
 
 </div>
 
 
 </footer><!-- /.post-info --></div>
-                <div class="content"><p>After going back and forth to what technology I wanted behind my blog I decided on;</p>
-<h1><a href="http://blog.getpelican.com/">Pelican</a> as the static blog generator</h1>
-<p>Pelican is written in python, is very extendible with plugins and easy to create themes.
-It is also easy to configure and use. The main reason I went with pelican is its simplicity, and possibility to customize.</p>
-<p>There is already other blogs out there that explains <a href="http://blog.aclark.net/yes-this-blog-is-now-powered-by-pelican.html">pelican advantages and disadvantages</a> and other blogs that have info about <a href="http://martinbrochhaus.com/2012/02/pelican.html">using github pages and pelican</a>, so that is not something I will spend time on here. But if you like to blog using plain-text, python, html/js/css customization and a power full generator to put it into a blog, pelican might be something to check out.</p>
-<h1><a href="http://fletcherpenney.net/multimarkdown/">Multimarkdown</a> as the writing "format"</h1>
-<p>Multimarkdown is an extension to <a href="http://daringfireball.net/projects/markdown/">markdown</a>. Markdown is a structured way of writing articles, snippets, mail or even whole books. It was created as a way to write plaintext which can later be converted to html/pdf/odt/LaTeX or whatever you want, keeping the structure you want.</p>
-<p>To be honest, everyone who sends mail on a daily bases should at least look into this. Or at least thing about it. Getting mails that contains a lot of text, and no structure is painful to read.</p>
-<p>When it comes to Markdown vs. <a href="http://docutils.sourceforge.net/rst.html">reStructuredText</a>, I ended up with markdown because it feels much bigger than rst. Even tough rst is something which the python community uses a lot, it just feels a little dead. I have even tried to use rst for a long time, but it is missing some love from other people.</p>
-<h1><a href="http://pages.github.com/">Github pages</a> for hosting the generated html files</h1>
-<p>I love using Github for <a href="https://github.com/xeor/">my opensourced projects</a>, so it felt very natural to use their pages to store the html files for my blog. It is free, easy to publish to, and stable. I don't really have much more to say on this. But if my blog was not going to be a bunch of static files, I would probably have used <a href="http://www.heroku.com/">Heroku</a>.</p></div>
+                <div class="content"><p>If you look around the interwebs for <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> information you will probably look around for a while and after some hours you will ask yourself why most of it is from 2006.
+To be honest, I really don't know. But if you think SELinux is dead because of this, think again. SELinux is very much alive. But one reason might be that SELinux is really stable and have proven so over a long time. That is why my theory is that it is more of less, done. There is no need to add features, its not needed.
+That being said, having a nice interface to write SELinux policies in will be more than welcome.</p>
+<p>I will write a couple of blog articles from time to time about SELinux. So this entry is just to show you where I have found different information, and why I looked for exactly that info.</p>
+<ul>
+<li><a href="http://billauer.co.il/selinux-policy-module-howto.html">Eli Billauer</a> have a really great blog post about creating SELinux policies. Read it!</li>
+<li><a href="http://danwalsh.livejournal.com/">danwalsh blog</a> is a blog by Dan Walsh mostly about SELinux stuff.</li>
+<li><a href="http://oss.tresys.com/docs/refpolicy/api/">tresys refpolicy api</a> is at the one and only reference guide.</li>
+<li><a href="http://oss.tresys.com/docs/refpolicy/api/kernel_files.html">tresys refpolicy kernel files</a> is a list of interfaces mostly used. Like file_types(), and its siblings. You can't really create policy modules without them as they define how your file/socket * whatever should act as. Deserves its own mention.</li>
+<li><a href="http://oss.tresys.com/projects/refpolicy">tresys refpolicy</a> is a reference policy you can download.</li>
+<li><a href="http://oss.tresys.com/projects/slide">tresys slide</a> looks like a promising IDE. Is last updated in 2009 or something..</li>
+<li><a href="http://www.nsa.gov/research/selinux/docs.shtml">nsa docs</a> is a list of resources.</li>
+<li><a href="http://www.nsa.gov/research/_files/selinux/papers/policy2/x109.shtml">nsa policy language</a> is one of the very few places you can actually get a list of available policy module macros.</li>
+<li><a href="http://fedoraproject.org/wiki/SELinux/PolicyGenTools">fedora policygentools</a> a list of some tools to help you create policies. Mostly old stuff.</li>
+</ul></div>
         </div>
         <hr />
         
@@ -195,7 +195,7 @@ It is also easy to configure and use. The main reason I went with pelican is its
     
 
     
-      <li class="active"><a href=".././tag/github.html">1</a></li>
+      <li class="active"><a href=".././tag/selinux.html">1</a></li>
     
 
     
@@ -280,7 +280,7 @@ It is also easy to configure and use. The main reason I went with pelican is its
     <li class="nav-header"><h4><i class="icon-pushpin icon-large"></i> articles on page</h4></li>
 
 
-    <li><a href=".././2012/10/blog-technology.html">Blog technology</a></li>
+    <li><a href=".././2012/11/selinux-finding-info.html">SELinux - Finding info</a></li>
 
 </ul></div>
 

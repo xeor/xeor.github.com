@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Boa Blog - ssh</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Lars Solberg">
+
+    <!-- Le styles -->
+    <link rel="stylesheet" href=".././theme/css/bootstrap.min.css" type="text/css" />
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+      .tag-1 {
+        font-size: 14pt;
+      }
+      .tag-2 {
+        font-size: 12pt;
+      }
+      .tag-2 {
+        font-size: 10pt;
+      }
+      .tag-4 {
+        font-size: 8pt;
+      }
+
+      .article {
+        border-right-width: 4px;
+        border-right-style: solid;
+      }
+      .article-odd {
+        border-left-color: #CCC;
+        border-right-color: #CCC;
+        border-top-color: #CCC;
+      }
+      .article-even {
+        border-left-color: #444;
+        border-right-color: #444;
+        border-top-color: #444;
+      }
+
+      .article > h1 {
+          font-size: 2.4em;
+          border-left-width: 4px;
+          border-left-style: solid;
+          border-top-width: 4px;
+          border-top-style: solid;
+          margin-bottom: 8px;
+          padding-left: 4px;
+      }
+
+      .content > h1 { font-size: 1.5em; }
+      .content > h2 { font-size: 1.3em; }
+      .content > h3 { font-size: 1.1em; }
+      .content > h4 { font-size: 0.9em; }
+      .content > h5 { font-size: 0.7em; }
+
+
+    </style>
+    <link href=".././theme/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link href=".././theme/css/font-awesome.css" rel="stylesheet">
+
+    
+    <link href=".././theme/css/pygments-emacs.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href=".././theme/images/favicon.ico">
+    <link rel="apple-touch-icon" href=".././theme/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href=".././theme/images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href=".././theme/images/apple-touch-icon-114x114.png">
+
+    <link href=".././feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="/blog/" />
+    
+    
+      <link href=".././feeds/tag-ssh.atom.xml" type="application/atom+xml" rel="alternate" title="/blog/tag/ssh" />
+    
+  </head>
+
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href=".././index.html">Boa Blog </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              
+              
+              
+                          <li class="divider-vertical"></li>
+              
+              
+                  <li >
+                    <a href=".././category/geeky.html">
+						<i class="icon-folder-open icon-large"></i>geeky
+					</a>
+                  </li>
+              
+                  <li >
+                    <a href=".././category/misc.html">
+						<i class="icon-folder-open icon-large"></i>misc
+					</a>
+                  </li>
+              
+                          <ul class="nav pull-right">
+                                <li><a href=".././archives.html"><i class="icon-th-list"></i>Archives</a></li>
+                          </ul>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span9" id="content">
+            
+
+        
+        
+        <div class="article article-odd">
+                <h1 class="article-odd"><a href=".././2012/11/two-factor-ssh-login-google-authenticator-and-selinux.html">Two factor ssh login, Google authenticator and SELinux</a></h1>
+                <div class="well small"><footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2012-11-12T21:21:00">
+        <i class="icon-calendar">&nbsp;</i>Mon 12 November 2012
+</abbr>
+
+<!--
+
+<span class="label">By</span>
+<a href=".././author/lars-solberg.html"><i class="icon-user"></i>Lars Solberg</a>
+
+-->
+
+
+
+<div class="pull-right">
+  <span class="label">Category</span>
+  <a href=".././category/geeky.html"><i class="icon-folder-open"></i>geeky</a>.
+
+
+  &nbsp;&nbsp;&nbsp;
+  <span class="label">Tags</span>
+  
+    <a href=".././tag/linux.html"><i class="icon-tag">&nbsp;</i>linux</a>&nbsp;&nbsp;
+  
+    <a href=".././tag/selinux.html"><i class="icon-tag">&nbsp;</i>selinux</a>&nbsp;&nbsp;
+  
+    <a href=".././tag/ssh.html"><i class="icon-tag">&nbsp;</i>ssh</a>&nbsp;&nbsp;
+  
+
+</div>
+
+
+</footer><!-- /.post-info --></div>
+                <div class="content"><p>There is too many people that literally hate <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a>, and comes to the conclusion that it is way to complicated or unfriendly and just ends up turning it off instead of trying to fix it so you can live with it.</p>
+<p>I want two factor authentication on one of my ssh servers. <a href="http://code.google.com/p/google-authenticator/">Google authenticator</a> is todays perfect solution for this. It is well made, support many different platforms on the client side, have a pam module, is opensourced and build on open standards. Most major Linux distroes have a package for it, so it should be easy enough to install. On <a href="https://www.scientificlinux.org/">Scientific Linux</a> (a great distro btw) or any other RedHat based distro it is already in the <a href="http://fedoraproject.org/wiki/EPEL">EPEL</a> repository called <em>google-authenticator</em>.</p>
+<p>This article isn't about setting up Google authenticator, there is plenty of blog articles about that already, on <a href="http://www.howtogeek.com/121650/how-to-secure-ssh-with-google-authenticators-two-factor-authentication/">How-to-geek</a>, <a href="http://www.mnxsolutions.com/security/two-factor-ssh-with-google-authenticator.html">mnxsolutions</a> or other places <a href="https://www.google.com/search?q=google+authenticator+ssh">Google will take you</a>.</p>
+<p>When you are done with the initial Google authenticator setup, you should have a file in your home directory called .google_authenticator, this file contains your authenticator secret, and other information the authenticator needs to log you in and keep track of what token is valid.</p>
+<p>But to get it to work with SELinux can be a little more tricky. Here is <em>my</em> process from start to finish.</p>
+<h2>Making a plan</h2>
+<p>If you try to login now, you won't probably even see the Google authenticator ask for the token. This is because SELinux blocks sshd from reading random files in the users home directory. You can see this normally in /var/log/secure with an entry like this:</p>
+<div class="codehilite"><pre><span class="n">Nov</span> 12 23<span class="p">:</span>34<span class="p">:</span>49 <span class="n">omi</span> <span class="n">sshd</span><span class="p">(</span><span class="n">pam_google_authenticator</span><span class="p">)[</span>3350<span class="p">]:</span> <span class="n">Failed</span> <span class="n">to</span> <span class="n">read</span> &quot;<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">xeor</span><span class="o">/</span><span class="p">.</span><span class="n">google_authenticator</span>&quot;
+</pre></div>
+
+
+<p>One way to find out what went wrong is to use SELinux's audit2allow tool like this.</p>
+<div class="codehilite"><pre><span class="n">root</span><span class="p">@</span><span class="n">omi</span> <span class="p">{</span> <span class="o">~</span> <span class="p">}</span># <span class="n">grep</span> <span class="n">ssh</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">audit</span><span class="o">/</span><span class="n">audit</span><span class="p">.</span><span class="nb">log</span> <span class="o">|</span> <span class="n">audit2allow</span>
+#<span class="o">============</span><span class="p">=</span> <span class="n">sshd_t</span> <span class="o">==============</span>
+#!!!! <span class="n">The</span> <span class="n">source</span> <span class="n">type</span> <span class="s">&#39;sshd_t&#39;</span> <span class="n">can</span> <span class="n">write</span> <span class="n">to</span> <span class="n">a</span> <span class="s">&#39;file&#39;</span> <span class="n">of</span> <span class="n">the</span> <span class="n">following</span> <span class="n">types</span><span class="p">:</span>
+# <span class="n">user_tmp_t</span><span class="p">,</span> <span class="n">auth_cache_t</span><span class="p">,</span> <span class="n">faillog_t</span><span class="p">,</span> <span class="n">ssh_home_t</span><span class="p">,</span> <span class="n">pam_var_run_t</span><span class="p">,</span> <span class="n">pcscd_var_run_t</span><span class="p">,</span> <span class="n">sshd_var_run_t</span><span class="p">,</span> <span class="n">gitosis_var_lib_t</span><span class="p">,</span> <span class="n">sshd_tmpfs_t</span><span class="p">,</span> <span class="n">var_auth_t</span><span class="p">,</span> <span class="n">root_t</span><span class="p">,</span> <span class="n">krb5_host_rcache_t</span>
+
+<span class="n">allow</span> <span class="n">sshd_t</span> <span class="n">user_home_dir_t</span><span class="p">:</span><span class="n">file</span> <span class="p">{</span> <span class="n">rename</span> <span class="n">write</span> <span class="n">getattr</span> <span class="n">read</span> <span class="n">create</span> <span class="n">unlink</span> <span class="n">open</span> <span class="p">};</span>
+</pre></div>
+
+
+<p>As you see, to fix the "failed to read" error, this is the SELinux module you have to make.
+There is several thing to take a note of based on this output and our current findings:</p>
+<ul>
+<li>This is the errors generated by SELinux when SELinux is already in deny mode! This means that this is probably the first of many errors we will meet.</li>
+<li>The allow rule audit2allow recommends is way to wide. It basically suggest that the server running as the sshd-type should have read/write/delete/+ info in the whole users home directory. This will defeat the purpose of having all this rules on sshd to lock it down.</li>
+<li>sshd already have write access to a bunch of files. We will use semanage to find out exactly which directories this is.</li>
+</ul>
+<p>To get a list of paths that SELinux changes context in, use semanage fcontext -l. The list you will get is the list for your current user. Like in the list below, you will see that the SELinux type ssh_home_t belongs to the files in <em>/root/</em>. That is because that is my current home directory.. More on this <em>magic</em> later in the article.</p>
+<div class="codehilite"><pre><span class="n">root</span><span class="p">@</span><span class="n">omi</span> <span class="p">{</span> <span class="o">~</span> <span class="p">}</span># <span class="n">semanage</span> <span class="n">fcontext</span> <span class="o">-</span><span class="n">l</span> <span class="o">|</span> <span class="n">grep</span> <span class="o">-</span><span class="n">E</span> &quot;<span class="n">user_tmp_t</span><span class="o">|</span><span class="n">auth_cache_t</span><span class="o">|</span><span class="n">faillog_t</span><span class="o">|</span><span class="n">ssh_home_t</span><span class="o">|</span><span class="n">pam_var_run_t</span><span class="o">|</span><span class="n">pcscd_var_run_t</span><span class="o">|</span><span class="n">sshd_var_run_t</span><span class="o">|</span><span class="n">gitosis_var_lib_t</span><span class="o">|</span><span class="n">sshd_tmpfs_t</span><span class="o">|</span><span class="n">var_auth_t</span><span class="o">|</span><span class="n">root_t</span><span class="o">|</span><span class="n">krb5_host_rcache_t</span>&quot;
+<span class="o">/</span>                                                  <span class="n">directory</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">root_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">initrd</span>                                            <span class="n">directory</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">root_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">root</span><span class="o">/\</span><span class="p">.</span><span class="n">shosts</span>                                     <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">ssh_home_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">root</span><span class="o">/\</span><span class="p">.</span><span class="n">ssh</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                                  <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">ssh_home_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">cache</span><span class="o">/</span><span class="n">coolkey</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                           <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">auth_cache_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">cache</span><span class="o">/</span><span class="n">krb5rcache</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                        <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">krb5_host_rcache_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">abl</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                                 <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">var_auth_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">amanda</span><span class="o">/\</span><span class="p">.</span><span class="n">ssh</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                        <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">ssh_home_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">gitolite</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                            <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">gitosis_var_lib_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">gitolite</span><span class="o">/\</span><span class="p">.</span><span class="n">ssh</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                      <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">ssh_home_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">gitosis</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                             <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">gitosis_var_lib_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">pam_shield</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                          <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">var_auth_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">pam_ssh</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                             <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">var_auth_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">btmp</span><span class="o">.*</span>                                    <span class="n">regular</span> <span class="n">file</span>       <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">faillog_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">faillog</span>                                   <span class="n">regular</span> <span class="n">file</span>       <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">faillog_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">tallylog</span>                                  <span class="n">regular</span> <span class="n">file</span>       <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">faillog_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">faillock</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                            <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">faillog_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">pam_mount</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                           <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">pam_var_run_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">pam_ssh</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                             <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">var_auth_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">pcscd</span><span class="o">\</span><span class="p">.</span><span class="n">comm</span>                               <span class="n">socket</span>             <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">pcscd_var_run_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">pcscd</span><span class="o">\</span><span class="p">.</span><span class="k">events</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                       <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">pcscd_var_run_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">pcscd</span><span class="o">\</span><span class="p">.</span><span class="n">pid</span>                                <span class="n">regular</span> <span class="n">file</span>       <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">pcscd_var_run_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">pcscd</span><span class="o">\</span><span class="p">.</span><span class="n">pub</span>                                <span class="n">regular</span> <span class="n">file</span>       <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">pcscd_var_run_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">sepermit</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                            <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">pam_var_run_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">sshd</span><span class="o">\</span><span class="p">.</span><span class="n">init</span><span class="o">\</span><span class="p">.</span><span class="n">pid</span>                           <span class="n">regular</span> <span class="n">file</span>       <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">sshd_var_run_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">sudo</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                                <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">pam_var_run_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">HTTP_23</span>                                   <span class="n">regular</span> <span class="n">file</span>       <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">krb5_host_rcache_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">host_0</span>                                    <span class="n">regular</span> <span class="n">file</span>       <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">krb5_host_rcache_t</span><span class="p">:</span><span class="n">s0</span>
+</pre></div>
+
+
+<p>Ok, so ~/.ssh/ kinda looks good, but that won't work without some pam configuration. Lets try to create an ssh SELinux module instead.</p>
+<h2>Making a SELinux module</h2></div>
+        </div>
+        <hr />
+        
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev disabled"><a href="#">&larr; Previous</a></li>
+    
+
+    
+      <li class="active"><a href=".././tag/ssh.html">1</a></li>
+    
+
+    
+      <li class="next disabled"><a href="#">&rarr; Next</a></li>
+    
+  </ul>
+</div>
+
+        </div>
+
+        <div class="span3">
+          
+
+
+<div class="well sidebar-nav" id="sidebar-categories">
+<ul class="nav nav-list">
+<li class="nav-header"><h4><i class="icon-folder-close icon-large"></i>Categories</h4></li>
+
+<li>
+<a href=".././category/geeky.html">
+    <i class="icon-folder-open icon-large"></i>geeky
+</a>
+</li>
+
+<li>
+<a href=".././category/misc.html">
+    <i class="icon-folder-open icon-large"></i>misc
+</a>
+</li>
+
+</ul></div>
+
+
+<div class="well sidebar-nav" id="sidebar-tags">
+<ul class="nav nav-list">
+<li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
+
+    <span class="tag-4"><a href=".././tag/network.html">network</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/github.html">github</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-1"><a href=".././tag/selinux.html">selinux</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/pelican.html">pelican</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/ssh.html">ssh</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/blog.html">blog</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/git.html">git</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-1"><a href=".././tag/linux.html">linux</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-1"><a href=".././tag/python.html">python</a>&nbsp;&nbsp;</span>
+
+
+</ul></div>
+
+
+<div class="well sidebar-nav" id="sidebar-social">
+<ul class="nav nav-list">
+<li class="nav-header"><h4><i class="icon-home icon-large"></i> social</h4></li>
+
+    <li><a href="https://github.com/xeor/"><i class="icon-github-sign icon-large"></i>github</a></li>
+
+    <li><a href="http://no.linkedin.com/in/lsolberg"><i class="icon-linkedin-sign icon-large"></i>linkedin</a></li>
+
+</ul></div>
+
+
+
+
+
+<div class="well sidebar-nav" id="sidebar-articles">
+<ul class="nav nav-list">
+
+    <li class="nav-header"><h4><i class="icon-pushpin icon-large"></i> articles on page</h4></li>
+
+
+    <li><a href=".././2012/11/two-factor-ssh-login-google-authenticator-and-selinux.html">Two factor ssh login, Google authenticator and SELinux</a></li>
+
+</ul></div>
+
+
+
+
+
+        </div>
+
+      </div><!--/row-->
+
+      <hr>
+
+    </div><!--/.fluid-container-->
+
+
+    
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+	var pageTracker = _gat._getTracker("UA-35739277-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+    
+    
+
+<script type="text/javascript">
+    var disqus_shortname = 'blog-boa-nu';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+
+    <!-- Le javascript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src=".././theme/js/jquery-1.7.2.min.js"></script>
+    <script src=".././theme/js/bootstrap.min.js"></script>
+  </body>
+</html>

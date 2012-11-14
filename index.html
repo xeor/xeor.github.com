@@ -132,7 +132,203 @@
         
         
         <div class="article article-odd">
-                <h1 class="article-odd"><a href="./2012/11/selinux-finding-info.html">SELinux - Finding info</a></h1>
+                <h1 class="article-odd"><a href="./2012/11/two-factor-ssh-login-google-authenticator-and-selinux.html">Two factor ssh login, Google authenticator and SELinux</a></h1>
+                <div class="well small"><footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2012-11-15T00:00:00">
+        <i class="icon-calendar">&nbsp;</i>Thu 15 November 2012
+</abbr>
+
+<!--
+
+<span class="label">By</span>
+<a href="./author/lars-solberg.html"><i class="icon-user"></i>Lars Solberg</a>
+
+-->
+
+
+
+<div class="pull-right">
+  <span class="label">Category</span>
+  <a href="./category/geeky.html"><i class="icon-folder-open"></i>geeky</a>.
+
+
+  &nbsp;&nbsp;&nbsp;
+  <span class="label">Tags</span>
+  
+    <a href="./tag/linux.html"><i class="icon-tag">&nbsp;</i>linux</a>&nbsp;&nbsp;
+  
+    <a href="./tag/selinux.html"><i class="icon-tag">&nbsp;</i>selinux</a>&nbsp;&nbsp;
+  
+    <a href="./tag/ssh.html"><i class="icon-tag">&nbsp;</i>ssh</a>&nbsp;&nbsp;
+  
+
+</div>
+
+
+</footer><!-- /.post-info --></div>
+                <div class="content"><p>There is too many people that literally hate <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a>, and comes to the conclusion that it is way to complicated or unfriendly and just ends up turning it off instead of trying to fix it so you can live with it.</p>
+<p>I want two factor authentication on one of my ssh servers. <a href="http://code.google.com/p/google-authenticator/">Google authenticator</a> is todays perfect solution for this. It is well made, support many different platforms on the client side, have a pam module, is opensourced and build on open standards. Most major Linux distroes have a package for it, so it should be easy enough to install. On <a href="https://www.scientificlinux.org/">Scientific Linux</a> (a great distro btw) or any other RedHat based distro it is already in the <a href="http://fedoraproject.org/wiki/EPEL">EPEL</a> repository called <em>google-authenticator</em>.</p>
+<p>This article isn't about setting up Google authenticator, there is plenty of blog articles about that already, on <a href="http://www.howtogeek.com/121650/how-to-secure-ssh-with-google-authenticators-two-factor-authentication/">How-to-geek</a>, <a href="http://www.mnxsolutions.com/security/two-factor-ssh-with-google-authenticator.html">mnxsolutions</a> or other places <a href="https://www.google.com/search?q=google+authenticator+ssh">Google will take you</a>.</p>
+<p>When you are done with the initial Google authenticator setup, you should have a file in your home directory called .google_authenticator, this file contains your authenticator secret, and other information the authenticator needs to log you in and keep track of what token is valid.</p>
+<p>But to get it to work with SELinux can be a little more tricky. Here is <em>my</em> process from start to finish.</p>
+<h2>Making a plan</h2>
+<p>If you try to login now, you won't probably even see the Google authenticator ask for the token. This is because SELinux blocks sshd from reading random files in the users home directory. You can see this normally in /var/log/secure with an entry like this:</p>
+<div class="codehilite"><pre><span class="n">Nov</span> 12 23<span class="p">:</span>34<span class="p">:</span>49 <span class="n">omi</span> <span class="n">sshd</span><span class="p">(</span><span class="n">pam_google_authenticator</span><span class="p">)[</span>3350<span class="p">]:</span> <span class="n">Failed</span> <span class="n">to</span> <span class="n">read</span> &quot;<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">xeor</span><span class="o">/</span><span class="p">.</span><span class="n">google_authenticator</span>&quot;
+</pre></div>
+
+
+<p>One way to find out what went wrong is to use SELinux's audit2allow tool like this.</p>
+<div class="codehilite"><pre><span class="n">root</span><span class="p">@</span><span class="n">omi</span> <span class="p">{</span> <span class="o">~</span> <span class="p">}</span># <span class="n">grep</span> <span class="n">ssh</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">audit</span><span class="o">/</span><span class="n">audit</span><span class="p">.</span><span class="nb">log</span> <span class="o">|</span> <span class="n">audit2allow</span>
+#<span class="o">============</span><span class="p">=</span> <span class="n">sshd_t</span> <span class="o">==============</span>
+#!!!! <span class="n">The</span> <span class="n">source</span> <span class="n">type</span> <span class="s">&#39;sshd_t&#39;</span> <span class="n">can</span> <span class="n">write</span> <span class="n">to</span> <span class="n">a</span> <span class="s">&#39;file&#39;</span> <span class="n">of</span> <span class="n">the</span> <span class="n">following</span> <span class="n">types</span><span class="p">:</span>
+# <span class="n">user_tmp_t</span><span class="p">,</span> <span class="n">auth_cache_t</span><span class="p">,</span> <span class="n">faillog_t</span><span class="p">,</span> <span class="n">ssh_home_t</span><span class="p">,</span> <span class="n">pam_var_run_t</span><span class="p">,</span> <span class="n">pcscd_var_run_t</span><span class="p">,</span> <span class="n">sshd_var_run_t</span><span class="p">,</span> <span class="n">gitosis_var_lib_t</span><span class="p">,</span> <span class="n">sshd_tmpfs_t</span><span class="p">,</span> <span class="n">var_auth_t</span><span class="p">,</span> <span class="n">root_t</span><span class="p">,</span> <span class="n">krb5_host_rcache_t</span>
+
+<span class="n">allow</span> <span class="n">sshd_t</span> <span class="n">user_home_dir_t</span><span class="p">:</span><span class="n">file</span> <span class="p">{</span> <span class="n">rename</span> <span class="n">write</span> <span class="n">getattr</span> <span class="n">read</span> <span class="n">create</span> <span class="n">unlink</span> <span class="n">open</span> <span class="p">};</span>
+</pre></div>
+
+
+<p>As you see, to fix the "failed to read" error, this is the SELinux module you have to make.
+There is several thing to take a note of based on this output and our current findings:</p>
+<ul>
+<li>This is the errors generated by SELinux when SELinux is already in deny mode! This means that this is probably the first of many errors we will meet.</li>
+<li>The allow rule audit2allow recommends is way to wide. It basically suggest that the server running as the sshd-type should have read/write/delete/+ info in the whole users home directory. This will defeat the purpose of having all this rules on sshd to lock it down.</li>
+<li>sshd already have write access to a bunch of files. We will use semanage to find out exactly which directories this is.</li>
+</ul>
+<p>To get a list of paths that SELinux changes context in, use semanage fcontext -l. The list you will get is the list for your current user. Like in the list below, you will see that the SELinux type ssh_home_t belongs to the files in <em>/root/</em>. That is because that is my current home directory.. More on this <em>magic</em> later in the article.</p>
+<div class="codehilite"><pre><span class="n">root</span><span class="p">@</span><span class="n">omi</span> <span class="p">{</span> <span class="o">~</span> <span class="p">}</span># <span class="n">semanage</span> <span class="n">fcontext</span> <span class="o">-</span><span class="n">l</span> <span class="o">|</span> <span class="n">grep</span> <span class="o">-</span><span class="n">E</span> &quot;<span class="n">user_tmp_t</span><span class="o">|</span><span class="n">auth_cache_t</span><span class="o">|</span><span class="n">faillog_t</span><span class="o">|</span><span class="n">ssh_home_t</span><span class="o">|</span><span class="n">pam_var_run_t</span><span class="o">|</span><span class="n">pcscd_var_run_t</span><span class="o">|</span><span class="n">sshd_var_run_t</span><span class="o">|</span><span class="n">gitosis_var_lib_t</span><span class="o">|</span><span class="n">sshd_tmpfs_t</span><span class="o">|</span><span class="n">var_auth_t</span><span class="o">|</span><span class="n">root_t</span><span class="o">|</span><span class="n">krb5_host_rcache_t</span>&quot;
+<span class="o">/</span>                                                  <span class="n">directory</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">root_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">initrd</span>                                            <span class="n">directory</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">root_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">root</span><span class="o">/\</span><span class="p">.</span><span class="n">shosts</span>                                     <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">ssh_home_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">root</span><span class="o">/\</span><span class="p">.</span><span class="n">ssh</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                                  <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">ssh_home_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">cache</span><span class="o">/</span><span class="n">coolkey</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                           <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">auth_cache_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">cache</span><span class="o">/</span><span class="n">krb5rcache</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                        <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">krb5_host_rcache_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">abl</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                                 <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">var_auth_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">amanda</span><span class="o">/\</span><span class="p">.</span><span class="n">ssh</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                        <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">ssh_home_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">gitolite</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                            <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">gitosis_var_lib_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">gitolite</span><span class="o">/\</span><span class="p">.</span><span class="n">ssh</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                      <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">ssh_home_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">gitosis</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                             <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">gitosis_var_lib_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">pam_shield</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                          <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">var_auth_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">pam_ssh</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                             <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">var_auth_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">btmp</span><span class="o">.*</span>                                    <span class="n">regular</span> <span class="n">file</span>       <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">faillog_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">faillog</span>                                   <span class="n">regular</span> <span class="n">file</span>       <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">faillog_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">tallylog</span>                                  <span class="n">regular</span> <span class="n">file</span>       <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">faillog_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">faillock</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                            <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">faillog_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">pam_mount</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                           <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">pam_var_run_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">pam_ssh</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                             <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">var_auth_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">pcscd</span><span class="o">\</span><span class="p">.</span><span class="n">comm</span>                               <span class="n">socket</span>             <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">pcscd_var_run_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">pcscd</span><span class="o">\</span><span class="p">.</span><span class="k">events</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                       <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">pcscd_var_run_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">pcscd</span><span class="o">\</span><span class="p">.</span><span class="n">pid</span>                                <span class="n">regular</span> <span class="n">file</span>       <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">pcscd_var_run_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">pcscd</span><span class="o">\</span><span class="p">.</span><span class="n">pub</span>                                <span class="n">regular</span> <span class="n">file</span>       <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">pcscd_var_run_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">sepermit</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                            <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">pam_var_run_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">sshd</span><span class="o">\</span><span class="p">.</span><span class="n">init</span><span class="o">\</span><span class="p">.</span><span class="n">pid</span>                           <span class="n">regular</span> <span class="n">file</span>       <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">sshd_var_run_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">sudo</span><span class="p">(</span><span class="o">/.*</span><span class="p">)</span>?                                <span class="n">all</span> <span class="n">files</span>          <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">pam_var_run_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">HTTP_23</span>                                   <span class="n">regular</span> <span class="n">file</span>       <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">krb5_host_rcache_t</span><span class="p">:</span><span class="n">s0</span> 
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">host_0</span>                                    <span class="n">regular</span> <span class="n">file</span>       <span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">krb5_host_rcache_t</span><span class="p">:</span><span class="n">s0</span>
+</pre></div>
+
+
+<p>Ok, so ~/.ssh/ kinda looks good, but that won't work without some pam configuration. Lets try to create an ssh SELinux module instead and use the default /home/username/.google_authenticator location.</p>
+<h2>Making a SELinux module</h2>
+<p>audit2allow supports an <em>-M modulename</em> option that creates the module for you based on what you pipe to it. However, we will make this one from scratch, since its easier to learn, and easier to test and maintain.</p>
+<p>First, create a folder for our module, lets just put it in <em>/root/selinux/modules/sshd_google_authenticator/</em> for now. Go into it.
+Make sure you can find the selinux-devel make file, usually located at /usr/share/selinux/devel/Makefile. In ScientificLinux <em>yum provides /usr/share/selinux/devel/Makefile</em> tells me that this already comes with the package <em>selinux-policy</em>
+You can now use this Makefile to compile the SELinux policy module. A good tip is to create an alias called semake like this:</p>
+<div class="codehilite"><pre><span class="n">alias</span> <span class="n">semake</span><span class="p">=</span><span class="s">&#39;make -f /usr/share/selinux/devel/Makefile&#39;</span>
+</pre></div>
+
+
+<p>Still in your sshd_google_authenticator folder either use audit2allow to get the basic rules, or create them from scratch.
+A quick headsup about the file extensions;</p>
+<ul>
+<li>.te is the type enforcement file. This contains all the rules and code to confine the application. This is the main file.</li>
+<li>.fc is a list of paths and files that should get specific context. You can all of them using <em>semange fcontext -l</em> (That’s a small L).</li>
+<li>.if interface file used for information for other domains communication. Don't mind this file for now.</li>
+</ul>
+<p>Everything you really need is the .te file, and this is how it looks like in our sshd google authenticator module (it can be named anything, as long as it ends with .te).</p>
+<div class="codehilite"><pre><span class="c"># Name and version, every module should have this.</span>
+<span class="n">policy_module</span><span class="p">(</span><span class="n">sshd_google_authenticator</span><span class="p">,</span> 0<span class="p">.</span>0<span class="p">.</span>1<span class="p">)</span>
+
+<span class="c"># List of the types, class and everything else you are going to use in your module that is not defined in this .te file.</span>
+<span class="c"># If you are getting any errors when you compile your module that it is unable to find a type, you probably forgot to declare it here.</span>
+<span class="n">require</span> <span class="p">{</span>
+  <span class="nb">type</span> <span class="n">sshd_t</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c"># This is where we define our type. A good practise is to append _t for all types.</span>
+<span class="c"># This is the type we are going to give our .google_authenticator file.</span>
+<span class="nb">type</span> <span class="n">sshd_google_authenticator_t</span><span class="p">;</span>
+
+<span class="c"># What role our type should have. This is almost always going to be object_r</span>
+<span class="n">role</span> <span class="n">object_r</span> <span class="n">types</span> <span class="n">sshd_google_authenticator_t</span><span class="p">;</span>
+
+<span class="c"># What sshd_t (the context the ssh daemon runs as) should be able to do with our type (sshd_google_authenticator_t),</span>
+<span class="c"># as a file. rename, create and unlink are base definitions, rw_file_perms is a set of rules.</span>
+<span class="c"># The rw_file_perms group is defined in /usr/share/selinux/devel/include/support/obj_perm_sets.spt with a lot of other</span>
+<span class="c"># groups. Reading this files give you a good overview of what they allow.</span>
+<span class="n">allow</span> <span class="n">sshd_t</span> <span class="n">sshd_google_authenticator_t</span><span class="p">:</span><span class="n">file</span> <span class="p">{</span> <span class="nb">rename</span> <span class="n">create</span> <span class="nb">unlink</span> <span class="n">rw_file_perms</span> <span class="p">};</span>
+
+<span class="c"># Without this, SELinux will be way too strict as default, as it won&#39;t know what this type really is.</span>
+<span class="c"># Remember that SELinux doesn’t only deal with files, but sockets and other filetypes as well.</span>
+<span class="c"># Leaving this out will still allow sshd_t to do its stuff, but you, in your shell will see a weird file.</span>
+<span class="c"># The only thing you will see is the file name. Even permissions will be hidden from you. (a fun trick to pull on your friends.. :] )</span>
+<span class="c"># An overview of this is located at http://oss.tresys.com/docs/refpolicy/api/kernel_files.html.</span>
+<span class="n">files_type</span><span class="p">(</span><span class="n">sshd_google_authenticator_t</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Now, when this file is created, create another file with the same name, but with the .fc extension. This should contain one line:</p>
+<div class="codehilite"><pre><span class="n">HOME_DIR</span><span class="o">/\</span><span class="p">.</span><span class="n">google_authenticator</span>     <span class="o">--</span>  <span class="n">gen_context</span><span class="p">(</span><span class="n">system_u</span><span class="p">:</span><span class="n">object_r</span><span class="p">:</span><span class="n">sshd_google_authenticator_t</span><span class="p">,</span><span class="n">s0</span><span class="p">)</span>
+</pre></div>
+
+
+<p>This file have 3 parts. Path, type and context.</p>
+<p>The first part is the path, on home directories, the home directory is replaced with HOME_DIR, this is all taken care of by SELinux and it generates this out of the home folders in passwd (as default).
+Don't use stuff like /home/*/.google_authenticator here.. It won't work as expected. However, on other directories not in anyones home directory should be find to enter here.
+Other than the magic HOME_DIR alias, there is HOME_ROOT, ROLE_…, and user_… (I think). But this are almost never used, and the documentation for this is hard to get..</p>
+<p>The second part is the type. -- means that this is a file. -d means it is a directory (there is more options as well). Nothing special about this.</p>
+<p>The last part is what context our file should belong to, and the MLS level (the s0 part. Don't worry about this).</p>
+<p>Now that you have this two files, check that it compiles using our semake alias. Just type <em>semake</em>. If you see something like this, congrats.</p>
+<div class="codehilite"><pre><span class="n">Compiling</span> <span class="n">targeted</span> <span class="n">sshd_google_authenticator</span> <span class="n">module</span>
+<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">checkmodule</span><span class="p">:</span>  <span class="n">loading</span> <span class="n">policy</span> <span class="n">configuration</span> <span class="n">from</span> <span class="n">tmp</span><span class="o">/</span><span class="n">sshd_google_authenticator</span><span class="p">.</span><span class="n">tmp</span>
+<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">checkmodule</span><span class="p">:</span>  <span class="n">policy</span> <span class="n">configuration</span> <span class="n">loaded</span>
+<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">checkmodule</span><span class="p">:</span>  <span class="n">writing</span> <span class="n">binary</span> <span class="n">representation</span> <span class="p">(</span><span class="n">version</span> 10<span class="p">)</span> <span class="n">to</span> <span class="n">tmp</span><span class="o">/</span><span class="n">sshd_google_authenticator</span><span class="p">.</span><span class="nb">mod</span>
+<span class="n">Creating</span> <span class="n">targeted</span> <span class="n">sshd_google_authenticator</span><span class="p">.</span><span class="n">pp</span> <span class="n">policy</span> <span class="n">package</span>
+<span class="n">rm</span> <span class="n">tmp</span><span class="o">/</span><span class="n">sshd_google_authenticator</span><span class="p">.</span><span class="nb">mod</span><span class="p">.</span><span class="n">fc</span> <span class="n">tmp</span><span class="o">/</span><span class="n">sshd_google_authenticator</span><span class="p">.</span><span class="nb">mod</span>
+</pre></div>
+
+
+<p>If not, go trough your two files and try to find the error. If your output was similar, you should have a file with the same name as the others with a .pp extension. This is your compiled module!</p>
+<p>To enable it, type <em>semodule -i sshd_google_authenticator.pp</em>, and it should load. <em>semodule -r sshd_google_authenticator.pp</em> will remove the module.
+Also, note that loading the module will not change the context of your file. But selinux will now use your fc file when using restorecon, or other relabelling command.
+Use <em>restorecon /home/username/.google_authenticator</em> to do that now. <em>ls -lZ /home/username/.google_authenticator</em> to verify that the file have a new context.</p>
+<p>And in case you wonder, your module will survive a reboot :)</p>
+<h2>Our module got a problem</h2>
+<p>Now that we have a module that work as expected, I have one good and one bad news. The bad one; our module won't solve our sshd google authenticator problem.
+The good one; you now hopefully know how to create your own basic modules for whatever you want.</p>
+<p>The problem is not SELinux related, it works as it should. However, (as you might already have spotted), we need to give sshd unlink and rename permissions to our file.
+We can verify that the file is replaced with a new one looking at the inode on the file. <em>ls -li /home/username/.google_authenticator</em> before and after logging in using the one time password.
+The pid changes, the file is regenerated and created. Which means it looses its SELinux context, and ruin the whole plan.</p>
+<p>SELinux doesn’t really care about file paths. I don't know if there is anyway to have a file getting it's default context like we want here, without putting it in another folder firs and make a rule that says "every file created in this folder should get our_context_t". New files created in your home folder will get the user_home_t context, which is NOT something we want sshd to have full control over. That would break the whole idea…</p>
+<h2>Plan B</h2>
+<p>We already know that /home/username/.ssh is a folder that acts the way we want. So our plan b is to put our .google_authenticator file in that instead.</p>
+<p>In the <a href="http://google-authenticator.googlecode.com/git/libpam/README">google authenticator libpam README</a>, it said that we can manually set the location of the secret. Looks like our solution is simpler than first thought.</p>
+<p>Replace the entry in our pam.d file with:</p>
+<div class="codehilite"><pre>auth       required     pam_google_authenticator.so secret=/home/<span class="cp">${</span><span class="n">USER</span><span class="cp">}</span>/.ssh/.google_authenticator
+</pre></div>
+
+
+<p>That’s all, it should now work perfectly in harmony with SELinux, even without our newly created module!
+This solution will for obvious reasons not work with the root user, because of the home path. But you should disable root login anyway. Use sudo!</p>
+<h2>One extra paranoid tip</h2>
+<p>Arguably, having the user access to the .google_authenticator file is a security risk. Since an attacker can steal or change the secret if they are able to get to your logged in terminal.
+Sure, but then you have already lost. But if you are using this for only one user, and want this extra paranoid setup. Check out <a href="https://www.axivo.com/community/threads/secure-two-step-google-auth-login-in-centos.174/">this blog post at axivo</a>, specially the <em>Dark side</em> part..</p></div>
+        </div>
+        <hr />
+        
+        
+        <div class="article article-even">
+                <h1 class="article-even"><a href="./2012/11/selinux-finding-info.html">SELinux - Finding info</a></h1>
                 <div class="well small"><footer class="post-info">
 <span class="label">Date</span>
 <abbr class="published" title="2012-11-13T12:00:00">
@@ -184,8 +380,8 @@ That being said, having a nice interface to write SELinux policies in will be mo
         <hr />
         
         
-        <div class="article article-even">
-                <h1 class="article-even"><a href="./2012/10/python-threading-example-creating-pingerpy.html">Python threading example, creating Pinger.py</a></h1>
+        <div class="article article-odd">
+                <h1 class="article-odd"><a href="./2012/10/python-threading-example-creating-pingerpy.html">Python threading example, creating Pinger.py</a></h1>
                 <div class="well small"><footer class="post-info">
 <span class="label">Date</span>
 <abbr class="published" title="2012-10-24T23:00:00">
@@ -310,8 +506,8 @@ We are using 8 thread_count in this example. This number should not be higher th
         <hr />
         
         
-        <div class="article article-odd">
-                <h1 class="article-odd"><a href="./2012/10/blog-technology.html">Blog technology</a></h1>
+        <div class="article article-even">
+                <h1 class="article-even"><a href="./2012/10/blog-technology.html">Blog technology</a></h1>
                 <div class="well small"><footer class="post-info">
 <span class="label">Date</span>
 <abbr class="published" title="2012-10-21T20:00:00">
@@ -363,8 +559,8 @@ It is also easy to configure and use. The main reason I went with pelican is its
         <hr />
         
         
-        <div class="article article-even">
-                <h1 class="article-even"><a href="./2012/10/another-blog-is-born.html">Another blog is born</a></h1>
+        <div class="article article-odd">
+                <h1 class="article-odd"><a href="./2012/10/another-blog-is-born.html">Another blog is born</a></h1>
                 <div class="well small"><footer class="post-info">
 <span class="label">Date</span>
 <abbr class="published" title="2012-10-21T00:00:00">
@@ -462,28 +658,31 @@ It is also easy to configure and use. The main reason I went with pelican is its
 <ul class="nav nav-list">
 <li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
 
-    <span class="tag-4"><a href="./tag/git.html">git</a>&nbsp;&nbsp;</span>
+    <span class="tag-1"><a href="./tag/selinux.html">selinux</a>&nbsp;&nbsp;</span>
 
 
     <span class="tag-4"><a href="./tag/network.html">network</a>&nbsp;&nbsp;</span>
 
 
-    <span class="tag-4"><a href="./tag/linux.html">linux</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-4"><a href="./tag/blog.html">blog</a>&nbsp;&nbsp;</span>
-
-
     <span class="tag-4"><a href="./tag/github.html">github</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href="./tag/git.html">git</a>&nbsp;&nbsp;</span>
 
 
     <span class="tag-1"><a href="./tag/python.html">python</a>&nbsp;&nbsp;</span>
 
 
-    <span class="tag-4"><a href="./tag/selinux.html">selinux</a>&nbsp;&nbsp;</span>
-
-
     <span class="tag-4"><a href="./tag/pelican.html">pelican</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-1"><a href="./tag/linux.html">linux</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href="./tag/ssh.html">ssh</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href="./tag/blog.html">blog</a>&nbsp;&nbsp;</span>
 
 
 </ul></div>
@@ -508,6 +707,8 @@ It is also easy to configure and use. The main reason I went with pelican is its
 
     <li class="nav-header"><h4><i class="icon-pushpin icon-large"></i> articles on page</h4></li>
 
+
+    <li><a href="./2012/11/two-factor-ssh-login-google-authenticator-and-selinux.html">Two factor ssh login, Google authenticator and SELinux</a></li>
 
     <li><a href="./2012/11/selinux-finding-info.html">SELinux - Finding info</a></li>
 

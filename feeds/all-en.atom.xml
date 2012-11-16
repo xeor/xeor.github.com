@@ -168,6 +168,10 @@ That being said, having a nice interface to write SELinux policies in will be mo
 &lt;li&gt;&lt;a href="http://www.nsa.gov/research/selinux/docs.shtml"&gt;nsa docs&lt;/a&gt; is a list of resources.&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://www.nsa.gov/research/_files/selinux/papers/policy2/x109.shtml"&gt;nsa policy language&lt;/a&gt; is one of the very few places you can actually get a list of available policy module macros.&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://fedoraproject.org/wiki/SELinux/PolicyGenTools"&gt;fedora policygentools&lt;/a&gt; a list of some tools to help you create policies. Mostly old stuff.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Added: &lt;em&gt;16. Nov 2012&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://selinuxproject.org"&gt;selinux project&lt;/a&gt; A general good reasource!&lt;/li&gt;
 &lt;/ul&gt;</summary><category term="linux"></category><category term="selinux"></category></entry><entry><title>Python threading example, creating Pinger.py</title><link href="http://blog.boa.nu/2012/10/python-threading-example-creating-pingerpy.html" rel="alternate"></link><updated>2012-10-24T23:00:00+02:00</updated><author><name>Lars Solberg</name></author><id>tag:blog.boa.nu,2012-10-24:2012/10/python-threading-example-creating-pingerpy.html</id><summary type="html">&lt;p&gt;&lt;a href="http://docs.python.org/library/threading.html"&gt;Threading&lt;/a&gt; in Python can be confusing in the beginning. Many examples out there are overly complicated so here is another example that I have tried to keep simple.&lt;/p&gt;
 &lt;p&gt;Here, I want a fast way to ping every host/ip in a list. As fast as we can, threaded, and then at last return a dict with two items. A list of dead nodes, and a list of nodes who answers on ping.&lt;/p&gt;
 &lt;p&gt;Example:&lt;/p&gt;

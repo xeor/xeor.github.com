@@ -168,4 +168,8 @@ That being said, having a nice interface to write SELinux policies in will be mo
 &lt;li&gt;&lt;a href="http://www.nsa.gov/research/selinux/docs.shtml"&gt;nsa docs&lt;/a&gt; is a list of resources.&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://www.nsa.gov/research/_files/selinux/papers/policy2/x109.shtml"&gt;nsa policy language&lt;/a&gt; is one of the very few places you can actually get a list of available policy module macros.&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://fedoraproject.org/wiki/SELinux/PolicyGenTools"&gt;fedora policygentools&lt;/a&gt; a list of some tools to help you create policies. Mostly old stuff.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Added: &lt;em&gt;16. Nov 2012&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://selinuxproject.org"&gt;selinux project&lt;/a&gt; A general good reasource!&lt;/li&gt;
 &lt;/ul&gt;</summary><category term="linux"></category><category term="selinux"></category></entry></feed>

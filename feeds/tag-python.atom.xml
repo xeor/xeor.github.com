@@ -53,7 +53,9 @@ The dcim0123 file have a tag like &lt;em&gt;#People-Lars&lt;/em&gt;, which means
 &lt;h2&gt;Usage&lt;/h2&gt;
 &lt;p&gt;Using taggo is simple, just put it in any directory and put something like &lt;em&gt;22 * &lt;/em&gt; * &lt;em&gt; /usr/bin/python /path/to/taggo run_once&lt;/em&gt; in the crontab. It will make sure that new symlinks is created.&lt;/p&gt;
 &lt;p&gt;If you rename a file, the symlink will die. But when you use the run_once parameter, it will automatically delete the invalid symlinks. I have been very careful when creating the delete function. It will only delete symlinks where the paths they point to does not exists. and to delete the empty directories, we are using os.rmdir, which is a python function that is made to delete empty directories only.&lt;/p&gt;
-&lt;p&gt;To find and use the project, check out the Github link at the top of this article.&lt;/p&gt;</summary><category term="linux"></category><category term="python"></category></entry><entry><title>Python threading example, creating Pinger.py</title><link href="http://blog.boa.nu/2012/10/python-threading-example-creating-pingerpy.html" rel="alternate"></link><updated>2012-10-24T23:00:00+02:00</updated><author><name>Lars Solberg</name></author><id>tag:blog.boa.nu,2012-10-24:2012/10/python-threading-example-creating-pingerpy.html</id><summary type="html">&lt;p&gt;&lt;a href="http://docs.python.org/library/threading.html"&gt;Threading&lt;/a&gt; in Python can be confusing in the beginning. Many examples out there are overly complicated so here is another example that I have tried to keep simple.&lt;/p&gt;
+&lt;p&gt;To find and use the project, check out the Github link at the top of this article.&lt;/p&gt;</summary><category term="linux"></category><category term="python"></category></entry><entry><title>Python threading example, creating Pinger.py</title><link href="http://blog.boa.nu/2012/10/python-threading-example-creating-pingerpy.html" rel="alternate"></link><updated>2012-10-24T23:00:00+02:00</updated><author><name>Lars Solberg</name></author><id>tag:blog.boa.nu,2012-10-24:2012/10/python-threading-example-creating-pingerpy.html</id><summary type="html">&lt;p&gt;Update 18. Nov 2012:
+Cleaned up some comments about cores. To make it clear, this will only run on 1 core!&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://docs.python.org/library/threading.html"&gt;Threading&lt;/a&gt; in Python can be confusing in the beginning. Many examples out there are overly complicated so here is another example that I have tried to keep simple.&lt;/p&gt;
 &lt;p&gt;Here, I want a fast way to ping every host/ip in a list. As fast as we can, threaded, and then at last return a dict with two items. A list of dead nodes, and a list of nodes who answers on ping.&lt;/p&gt;
 &lt;p&gt;Example:&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;In&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt; &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pinger&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Pinger&lt;/span&gt;
@@ -68,7 +70,7 @@ The dcim0123 file have a tag like &lt;em&gt;#People-Lars&lt;/em&gt;, which means
 
 
 &lt;p&gt;The example above will ping 8 hosts at the time and saving the results to the end.
-We are using 8 thread_count in this example. This number should not be higher than the total amount of cpu cores on your computer!&lt;/p&gt;
+We are using 8 thread_count in this example. Which means that python will have 8 ping command running at the same time.&lt;/p&gt;
 &lt;p&gt;The whole source of the Pinger class looks like this, read the comments and you will see how it works:&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="c"&gt;#!/usr/bin/env python&lt;/span&gt;
 
@@ -80,10 +82,9 @@ We are using 8 thread_count in this example. This number should not be higher th
     &lt;span class="n"&gt;hosts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt; &lt;span class="c"&gt;# List of all hosts/ips in our input queue&lt;/span&gt;
 
     &lt;span class="c"&gt;# How many ping process at the time.&lt;/span&gt;
-    &lt;span class="c"&gt;# Not higher than the total amounts of CPU cores you have!&lt;/span&gt;
     &lt;span class="n"&gt;thread_count&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt;
 
-    &lt;span class="c"&gt;# Lock object to help the cores not tramping on each other toes..&lt;/span&gt;
+    &lt;span class="c"&gt;# Lock object to keep track the threads in loops, where it can potentially be race conditions.&lt;/span&gt;
     &lt;span class="n"&gt;lock&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;threading&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Lock&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 
     &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;ping&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ip&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
@@ -101,7 +102,7 @@ We are using 8 thread_count in this example. This number should not be higher th
         &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;hosts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
             &lt;span class="n"&gt;ip&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;hosts&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pop&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 
-        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lock&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;release&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c"&gt;# Release the lock, so another core could grab it.&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lock&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;release&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c"&gt;# Release the lock, so another thread could grab it.&lt;/span&gt;
 
         &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;ip&lt;/span&gt;
 

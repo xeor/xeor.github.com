@@ -272,7 +272,9 @@ The dcim0123 file have a tag like <em>#People-Lars</em>, which means that taggo 
 
 
 </footer><!-- /.post-info --></div>
-                <div class="content"><p><a href="http://docs.python.org/library/threading.html">Threading</a> in Python can be confusing in the beginning. Many examples out there are overly complicated so here is another example that I have tried to keep simple.</p>
+                <div class="content"><p>Update 18. Nov 2012:
+Cleaned up some comments about cores. To make it clear, this will only run on 1 core!</p>
+<p><a href="http://docs.python.org/library/threading.html">Threading</a> in Python can be confusing in the beginning. Many examples out there are overly complicated so here is another example that I have tried to keep simple.</p>
 <p>Here, I want a fast way to ping every host/ip in a list. As fast as we can, threaded, and then at last return a dict with two items. A list of dead nodes, and a list of nodes who answers on ping.</p>
 <p>Example:</p>
 <div class="codehilite"><pre><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">pinger</span> <span class="kn">import</span> <span class="n">Pinger</span>
@@ -287,7 +289,7 @@ The dcim0123 file have a tag like <em>#People-Lars</em>, which means that taggo 
 
 
 <p>The example above will ping 8 hosts at the time and saving the results to the end.
-We are using 8 thread_count in this example. This number should not be higher than the total amount of cpu cores on your computer!</p>
+We are using 8 thread_count in this example. Which means that python will have 8 ping command running at the same time.</p>
 <p>The whole source of the Pinger class looks like this, read the comments and you will see how it works:</p>
 <div class="codehilite"><pre><span class="c">#!/usr/bin/env python</span>
 
@@ -299,10 +301,9 @@ We are using 8 thread_count in this example. This number should not be higher th
     <span class="n">hosts</span> <span class="o">=</span> <span class="p">[]</span> <span class="c"># List of all hosts/ips in our input queue</span>
 
     <span class="c"># How many ping process at the time.</span>
-    <span class="c"># Not higher than the total amounts of CPU cores you have!</span>
     <span class="n">thread_count</span> <span class="o">=</span> <span class="mi">4</span>
 
-    <span class="c"># Lock object to help the cores not tramping on each other toes..</span>
+    <span class="c"># Lock object to keep track the threads in loops, where it can potentially be race conditions.</span>
     <span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">ping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ip</span><span class="p">):</span>
@@ -320,7 +321,7 @@ We are using 8 thread_count in this example. This number should not be higher th
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hosts</span><span class="p">:</span>
             <span class="n">ip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hosts</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span> <span class="c"># Release the lock, so another core could grab it.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span> <span class="c"># Release the lock, so another thread could grab it.</span>
 
         <span class="k">return</span> <span class="n">ip</span>
 
@@ -468,31 +469,31 @@ It is also easy to configure and use. The main reason I went with pelican is its
 <ul class="nav nav-list">
 <li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
 
+    <span class="tag-4"><a href=".././tag/blog.html">blog</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/git.html">git</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-2"><a href=".././tag/selinux.html">selinux</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/ssh.html">ssh</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-1"><a href=".././tag/linux.html">linux</a>&nbsp;&nbsp;</span>
+
+
     <span class="tag-4"><a href=".././tag/github.html">github</a>&nbsp;&nbsp;</span>
 
 
     <span class="tag-4"><a href=".././tag/network.html">network</a>&nbsp;&nbsp;</span>
 
 
-    <span class="tag-4"><a href=".././tag/pelican.html">pelican</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-4"><a href=".././tag/git.html">git</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-1"><a href=".././tag/linux.html">linux</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-4"><a href=".././tag/ssh.html">ssh</a>&nbsp;&nbsp;</span>
-
-
     <span class="tag-1"><a href=".././tag/python.html">python</a>&nbsp;&nbsp;</span>
 
 
-    <span class="tag-2"><a href=".././tag/selinux.html">selinux</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-4"><a href=".././tag/blog.html">blog</a>&nbsp;&nbsp;</span>
+    <span class="tag-4"><a href=".././tag/pelican.html">pelican</a>&nbsp;&nbsp;</span>
 
 
 </ul></div>

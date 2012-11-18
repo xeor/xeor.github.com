@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Boa Blog - github</title>
+    <title>Tagging files and folders using hashtags and symlinks</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Lars Solberg">
@@ -82,8 +82,8 @@
 
     <link href=".././feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="/blog/" />
     
+      <link href=".././feeds/category-geeky.atom.xml" type="application/atom+xml" rel="alternate" title="/blog/category/geeky" />
     
-      <link href=".././feeds/tag-github.atom.xml" type="application/atom+xml" rel="alternate" title="/blog/tag/github" />
     
   </head>
 
@@ -105,7 +105,7 @@
                           <li class="divider-vertical"></li>
               
               
-                  <li >
+                  <li class="active">
                     <a href=".././category/geeky.html">
 						<i class="icon-folder-open icon-large"></i>geeky
 					</a>
@@ -130,15 +130,24 @@
       <div class="row-fluid">
         <div class="span9" id="content">
             
-
-        
-        
-        <div class="article article-odd">
-                <h1 class="article-odd"><a href=".././2012/10/blog-technology.html">Blog technology</a></h1>
-                <div class="well small"><footer class="post-info">
+<section id="content">
+        <article>
+                <header>
+                        <h1>
+                                <a href=""
+                                        rel="bookmark"
+                                        title="Permalink to Tagging files and folders using hashtags and symlinks">
+                                        Tagging files and folders using hashtags and symlinks
+                                </a>
+                                
+                        </h1>
+                </header>
+                <div class="entry-content">
+                <div class="well">
+                        <footer class="post-info">
 <span class="label">Date</span>
-<abbr class="published" title="2012-10-21T20:00:00">
-        <i class="icon-calendar">&nbsp;</i>Sun 21 October 2012
+<abbr class="published" title="2012-11-18T00:00:00">
+        <i class="icon-calendar">&nbsp;</i>Sun 18 November 2012
 </abbr>
 
 <!--
@@ -158,55 +167,36 @@
   &nbsp;&nbsp;&nbsp;
   <span class="label">Tags</span>
   
-    <a href=".././tag/pelican.html"><i class="icon-tag">&nbsp;</i>pelican</a>&nbsp;&nbsp;
+    <a href=".././tag/linux.html"><i class="icon-tag">&nbsp;</i>linux</a>&nbsp;&nbsp;
   
     <a href=".././tag/python.html"><i class="icon-tag">&nbsp;</i>python</a>&nbsp;&nbsp;
   
-    <a href=".././tag/git.html"><i class="icon-tag">&nbsp;</i>git</a>&nbsp;&nbsp;
-  
-    <a href=".././tag/github.html"><i class="icon-tag">&nbsp;</i>github</a>&nbsp;&nbsp;
-  
-
-
-
-
 
 </div>
 
 
-</footer><!-- /.post-info --></div>
-                <div class="content"><p>After going back and forth to what technology I wanted behind my blog I decided on;</p>
-<h1><a href="http://blog.getpelican.com/">Pelican</a> as the static blog generator</h1>
-<p>Pelican is written in python, is very extendible with plugins and easy to create themes.
-It is also easy to configure and use. The main reason I went with pelican is its simplicity, and possibility to customize.</p>
-<p>There is already other blogs out there that explains <a href="http://blog.aclark.net/yes-this-blog-is-now-powered-by-pelican.html">pelican advantages and disadvantages</a> and other blogs that have info about <a href="http://martinbrochhaus.com/2012/02/pelican.html">using github pages and pelican</a>, so that is not something I will spend time on here. But if you like to blog using plain-text, python, html/js/css customization and a power full generator to put it into a blog, pelican might be something to check out.</p>
-<h1><a href="http://fletcherpenney.net/multimarkdown/">Multimarkdown</a> as the writing "format"</h1>
-<p>Multimarkdown is an extension to <a href="http://daringfireball.net/projects/markdown/">markdown</a>. Markdown is a structured way of writing articles, snippets, mail or even whole books. It was created as a way to write plaintext which can later be converted to html/pdf/odt/LaTeX or whatever you want, keeping the structure you want.</p>
-<p>To be honest, everyone who sends mail on a daily bases should at least look into this. Or at least thing about it. Getting mails that contains a lot of text, and no structure is painful to read.</p>
-<p>When it comes to Markdown vs. <a href="http://docutils.sourceforge.net/rst.html">reStructuredText</a>, I ended up with markdown because it feels much bigger than rst. Even tough rst is something which the python community uses a lot, it just feels a little dead. I have even tried to use rst for a long time, but it is missing some love from other people.</p>
-<h1><a href="http://pages.github.com/">Github pages</a> for hosting the generated html files</h1>
-<p>I love using Github for <a href="https://github.com/xeor/">my opensourced projects</a>, so it felt very natural to use their pages to store the html files for my blog. It is free, easy to publish to, and stable. I don't really have much more to say on this. But if my blog was not going to be a bunch of static files, I would probably have used <a href="http://www.heroku.com/">Heroku</a>.</p></div>
-        </div>
-        <hr />
-        
-
-
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev disabled"><a href="#">&larr; Previous</a></li>
-    
-
-    
-      <li class="active"><a href=".././tag/github.html">1</a></li>
-    
-
-    
-      <li class="next disabled"><a href="#">&rarr; Next</a></li>
-    
-  </ul>
-</div>
+</footer><!-- /.post-info -->
+                </div>
+                <p>There is lots of tools out there that let you organise files (specially your picture archive). However, they are all depending on some sort of database, one master computer to add the tags from, and you can't browse the organised files in their organised structure from all devices.</p>
+                </div><!-- /.entry-content -->
+                
+                <div class="comments">
+                <h2>Comments !</h2>
+                        <div id="disqus_thread"></div>
+                        <script type="text/javascript">
+                           var disqus_identifier = "2012/11/tagging-files-and-folders-using-hashtags-and-symlinks.html";
+                           (function() {
+                                var dsq = document.createElement('script');
+                                dsq.type = 'text/javascript'; dsq.async = true;
+                                dsq.src = 'http://blog-boa-nu.disqus.com/embed.js';
+                                (document.getElementsByTagName('head')[0] ||
+                                 document.getElementsByTagName('body')[0]).appendChild(dsq);
+                          })();
+                        </script>
+                </div>
+                
+        </article>
+</section>
 
         </div>
 
@@ -237,13 +227,7 @@ It is also easy to configure and use. The main reason I went with pelican is its
 <ul class="nav nav-list">
 <li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
 
-    <span class="tag-4"><a href=".././tag/github.html">github</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-4"><a href=".././tag/network.html">network</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-4"><a href=".././tag/pelican.html">pelican</a>&nbsp;&nbsp;</span>
+    <span class="tag-4"><a href=".././tag/ssh.html">ssh</a>&nbsp;&nbsp;</span>
 
 
     <span class="tag-4"><a href=".././tag/git.html">git</a>&nbsp;&nbsp;</span>
@@ -252,13 +236,19 @@ It is also easy to configure and use. The main reason I went with pelican is its
     <span class="tag-1"><a href=".././tag/linux.html">linux</a>&nbsp;&nbsp;</span>
 
 
-    <span class="tag-4"><a href=".././tag/ssh.html">ssh</a>&nbsp;&nbsp;</span>
+    <span class="tag-4"><a href=".././tag/network.html">network</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/github.html">github</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/pelican.html">pelican</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-1"><a href=".././tag/selinux.html">selinux</a>&nbsp;&nbsp;</span>
 
 
     <span class="tag-1"><a href=".././tag/python.html">python</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-2"><a href=".././tag/selinux.html">selinux</a>&nbsp;&nbsp;</span>
 
 
     <span class="tag-4"><a href=".././tag/blog.html">blog</a>&nbsp;&nbsp;</span>
@@ -284,10 +274,18 @@ It is also easy to configure and use. The main reason I went with pelican is its
 <div class="well sidebar-nav" id="sidebar-articles">
 <ul class="nav nav-list">
 
-    <li class="nav-header"><h4><i class="icon-pushpin icon-large"></i> articles on page</h4></li>
+    <li class="nav-header"><h4><i class="icon-pushpin icon-large"></i> every articles</h4></li>
 
+
+    <li><a href=".././2012/11/two-factor-ssh-login-google-authenticator-and-selinux.html">Two factor ssh login, Google authenticator and SELinux</a></li>
+
+    <li><a href=".././2012/11/selinux-finding-info.html">SELinux - Finding info</a></li>
+
+    <li><a href=".././2012/10/python-threading-example-creating-pingerpy.html">Python threading example, creating Pinger.py</a></li>
 
     <li><a href=".././2012/10/blog-technology.html">Blog technology</a></li>
+
+    <li><a href=".././2012/10/another-blog-is-born.html">Another blog is born</a></li>
 
 </ul></div>
 

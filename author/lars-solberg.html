@@ -159,6 +159,10 @@
     <a href=".././tag/blog.html"><i class="icon-tag">&nbsp;</i>blog</a>&nbsp;&nbsp;
   
 
+
+
+
+
 </div>
 
 
@@ -217,6 +221,10 @@
     <a href=".././tag/github.html"><i class="icon-tag">&nbsp;</i>github</a>&nbsp;&nbsp;
   
 
+
+
+
+
 </div>
 
 
@@ -265,6 +273,10 @@ It is also easy to configure and use. The main reason I went with pelican is its
   
     <a href=".././tag/network.html"><i class="icon-tag">&nbsp;</i>network</a>&nbsp;&nbsp;
   
+
+
+
+
 
 </div>
 
@@ -392,6 +404,10 @@ We are using 8 thread_count in this example. This number should not be higher th
     <a href=".././tag/selinux.html"><i class="icon-tag">&nbsp;</i>selinux</a>&nbsp;&nbsp;
   
 
+
+
+
+
 </div>
 
 
@@ -420,7 +436,108 @@ That being said, having a nice interface to write SELinux policies in will be mo
         
         
         <div class="article article-odd">
-                <h1 class="article-odd"><a href=".././2012/11/two-factor-ssh-login-google-authenticator-and-selinux.html">Two factor ssh login, Google authenticator and SELinux</a></h1>
+                <h1 class="article-odd"><a href=".././2012/11/tagging-files-and-folders-using-hashtags-and-symlinks.html">Tagging files and folders using hashtags and symlinks</a></h1>
+                <div class="well small"><footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2012-11-18T00:00:00">
+        <i class="icon-calendar">&nbsp;</i>Sun 18 November 2012
+</abbr>
+
+<!--
+
+<span class="label">By</span>
+<a href=".././author/lars-solberg.html"><i class="icon-user"></i>Lars Solberg</a>
+
+-->
+
+
+
+<div class="pull-right">
+  <span class="label">Category</span>
+  <a href=".././category/geeky.html"><i class="icon-folder-open"></i>geeky</a>.
+
+
+  &nbsp;&nbsp;&nbsp;
+  <span class="label">Tags</span>
+  
+    <a href=".././tag/linux.html"><i class="icon-tag">&nbsp;</i>linux</a>&nbsp;&nbsp;
+  
+    <a href=".././tag/python.html"><i class="icon-tag">&nbsp;</i>python</a>&nbsp;&nbsp;
+  
+
+
+
+
+  &nbsp;&nbsp;&nbsp;
+  <span class="label">Github</span>
+    <a href="https://github.com/xeor/taggo"><i class="icon-github-sign">/</i>xeor/taggo</a>&nbsp;&nbsp;
+
+
+</div>
+
+
+</footer><!-- /.post-info --></div>
+                <div class="content"><p>There is lots of tools out there that let you organise files (specially your picture archive). However, they are all depending on some sort of database, one master computer to add the tags from, and you can't browse the organised files in their organised structure from all devices.</p>
+<p>I made this project because I had this exact problem organising my own pictures. I wanted something which:</p>
+<ul>
+<li>You could tag pictures as close to where you look at them (IE, the file browser itself)</li>
+<li>Is platform independent.<ul>
+<li>Like real platform independent! I wanted to browse this tags on my TV!</li>
+</ul>
+</li>
+<li>Not another thing to backup. I am already backing up the pictures themselves.</li>
+<li>Support organising whole folders, not just single files.</li>
+</ul>
+<p>There is probably many more than myself that is annoyed by this problem, therefor I will share my solution, which is a python script that goes trough all the files in a directory, looks at the filenames and looks for hashtags. This is put into my storage NAS's crontab and runs every hour.</p>
+<h2>Example</h2>
+<h3>File structure</h3>
+<div class="codehilite"><pre><span class="n">xeor</span><span class="p">@</span><span class="n">omi</span> <span class="p">{</span> <span class="o">~/</span><span class="n">Documents</span><span class="o">/</span><span class="n">my_pictures</span> <span class="p">}</span>$ <span class="nb">find</span> <span class="p">.</span>
+<span class="p">.</span>
+<span class="o">./</span>2012 #<span class="n">Business</span> <span class="n">trip</span> <span class="n">to</span> #<span class="n">USA</span>
+<span class="o">./</span>2012 #<span class="n">Business</span> <span class="n">trip</span> <span class="n">to</span> #<span class="n">USA</span><span class="o">/</span><span class="n">dcim0123</span> #<span class="n">People</span><span class="o">-</span><span class="n">Lars</span><span class="p">.</span><span class="n">jpg</span>
+<span class="o">./</span>2012 #<span class="n">Business</span> <span class="n">trip</span> <span class="n">to</span> #<span class="n">USA</span><span class="o">/</span><span class="n">dcim0124</span><span class="p">.</span><span class="n">jpg</span>
+<span class="o">./</span>2012 #<span class="n">Business</span> <span class="n">trip</span> <span class="n">to</span> #<span class="n">USA</span><span class="o">/</span><span class="n">dcim0125</span><span class="p">.</span><span class="n">jpg</span>
+<span class="o">./</span>2012 #<span class="n">Business</span> <span class="n">trip</span> <span class="n">to</span> #<span class="n">USA</span><span class="o">/</span><span class="n">dcim0126</span> #<span class="n">Conference</span><span class="p">.</span><span class="n">jpg</span>
+</pre></div>
+
+
+<h3>Running taggo</h3>
+<div class="codehilite"><pre><span class="n">taggo</span> <span class="n">run_once</span>
+</pre></div>
+
+
+<h3>Tags created</h3>
+<div class="codehilite"><pre><span class="n">xeor</span><span class="p">@</span><span class="n">omi</span> <span class="p">{</span> <span class="o">~/</span><span class="n">Documents</span><span class="o">/</span><span class="n">tags</span> <span class="p">}</span>$ <span class="nb">find</span> <span class="p">.</span> 
+<span class="p">.</span>
+<span class="o">./</span><span class="n">Business</span>
+<span class="o">./</span><span class="n">Business</span><span class="o">/</span><span class="n">root</span> <span class="o">-</span> 2012 #<span class="n">Business</span> <span class="n">trip</span> <span class="n">to</span> #<span class="n">USA</span>
+<span class="o">./</span><span class="n">Conference</span>
+<span class="o">./</span><span class="n">Conference</span><span class="o">/</span>2012 #<span class="n">Business</span> <span class="n">trip</span> <span class="n">to</span> #<span class="n">USA</span> <span class="o">-</span> <span class="n">dcim0126</span> #<span class="n">Conference</span><span class="p">.</span><span class="n">jpg</span>
+<span class="o">./</span><span class="n">People</span>
+<span class="o">./</span><span class="n">People</span><span class="o">/</span><span class="n">Lars</span>
+<span class="o">./</span><span class="n">People</span><span class="o">/</span><span class="n">Lars</span><span class="o">/</span>2012 #<span class="n">Business</span> <span class="n">trip</span> <span class="n">to</span> #<span class="n">USA</span> <span class="o">-</span> <span class="n">dcim0123</span> #<span class="n">People</span><span class="o">-</span><span class="n">Lars</span><span class="p">.</span><span class="n">jpg</span>
+<span class="o">./</span><span class="n">USA</span>
+<span class="o">./</span><span class="n">USA</span><span class="o">/</span><span class="n">root</span> <span class="o">-</span> 2012 #<span class="n">Business</span> <span class="n">trip</span> <span class="n">to</span> #<span class="n">USA</span>
+</pre></div>
+
+
+<h3>Explaination</h3>
+<p>As you can see on the file structure, we created one folder and 4 files. The folder itself <em>2012 #Business trip to #USA</em> have two tags, <em>#Business</em> and <em>#USA</em> (as you probably already knew :) )
+The dcim0123 file have a tag like <em>#People-Lars</em>, which means that taggo should threat it as a sub tag.</p>
+<p>The list of tags created is now just a bunch of symlinks to the original files. <em>./USA/root - 2012 #Business trip to #USA</em> is a link to the folder called <em>2012 #Business trip to #USA</em>, the same with <em>./Business/root - 2012 #Business trip to #USA</em>. For our sub tag, you can see that it is in the directory People/Lars; <em>./People/Lars/2012 #Business trip to #USA - dcim0123 #People-Lars.jpg</em>.</p>
+<h3>Configuration</h3>
+<p>In the file called taggo.cfg you can define stuff like tag indicator (the hashtag), sub tag separator, what filename the symlinked filenames should get (default is <em>%(rel_folders)s - %(basename)s</em>), what to replace / with in tag filenames, content folder and tag folder.</p>
+<p>Taggo will automatically create the taggo.cfg file when you run it the first time. (Just do a <em>./taggo</em>)</p>
+<h2>Usage</h2>
+<p>Using taggo is simple, just put it in any directory and put something like <em>22 * </em> * <em> /usr/bin/python /path/to/taggo run_once</em> in the crontab. It will make sure that new symlinks is created.</p>
+<p>If you rename a file, the symlink will die. But when you use the run_once parameter, it will automatically delete the invalid symlinks. I have been very careful when creating the delete function. It will only delete symlinks where the paths they point to does not exists. and to delete the empty directories, we are using os.rmdir, which is a python function that is made to delete empty directories only.</p>
+<p>To find and use the project, check out the Github link at the top of this article.</p></div>
+        </div>
+        <hr />
+        
+        
+        <div class="article article-even">
+                <h1 class="article-even"><a href=".././2012/11/two-factor-ssh-login-google-authenticator-and-selinux.html">Two factor ssh login, Google authenticator and SELinux</a></h1>
                 <div class="well small"><footer class="post-info">
 <span class="label">Date</span>
 <abbr class="published" title="2012-11-15T00:00:00">
@@ -450,6 +567,10 @@ That being said, having a nice interface to write SELinux policies in will be mo
   
     <a href=".././tag/ssh.html"><i class="icon-tag">&nbsp;</i>ssh</a>&nbsp;&nbsp;
   
+
+
+
+
 
 </div>
 
@@ -678,31 +799,31 @@ Sure, but then you have already lost. But if you are using this for only one use
 <ul class="nav nav-list">
 <li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
 
+    <span class="tag-4"><a href=".././tag/github.html">github</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/network.html">network</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/pelican.html">pelican</a>&nbsp;&nbsp;</span>
+
+
     <span class="tag-4"><a href=".././tag/git.html">git</a>&nbsp;&nbsp;</span>
 
 
     <span class="tag-1"><a href=".././tag/linux.html">linux</a>&nbsp;&nbsp;</span>
 
 
-    <span class="tag-1"><a href=".././tag/selinux.html">selinux</a>&nbsp;&nbsp;</span>
+    <span class="tag-4"><a href=".././tag/ssh.html">ssh</a>&nbsp;&nbsp;</span>
 
 
     <span class="tag-1"><a href=".././tag/python.html">python</a>&nbsp;&nbsp;</span>
 
 
-    <span class="tag-4"><a href=".././tag/pelican.html">pelican</a>&nbsp;&nbsp;</span>
+    <span class="tag-2"><a href=".././tag/selinux.html">selinux</a>&nbsp;&nbsp;</span>
 
 
     <span class="tag-4"><a href=".././tag/blog.html">blog</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-4"><a href=".././tag/github.html">github</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-4"><a href=".././tag/ssh.html">ssh</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-4"><a href=".././tag/network.html">network</a>&nbsp;&nbsp;</span>
 
 
 </ul></div>
@@ -735,6 +856,8 @@ Sure, but then you have already lost. But if you are using this for only one use
     <li><a href=".././2012/10/python-threading-example-creating-pingerpy.html">Python threading example, creating Pinger.py</a></li>
 
     <li><a href=".././2012/11/selinux-finding-info.html">SELinux - Finding info</a></li>
+
+    <li><a href=".././2012/11/tagging-files-and-folders-using-hashtags-and-symlinks.html">Tagging files and folders using hashtags and symlinks</a></li>
 
     <li><a href=".././2012/11/two-factor-ssh-login-google-authenticator-and-selinux.html">Two factor ssh login, Google authenticator and SELinux</a></li>
 

@@ -312,6 +312,8 @@ The good one; you now hopefully know how to create your own basic modules for wh
 We can verify that the file is replaced with a new one looking at the inode on the file. <em>ls -li /home/username/.google_authenticator</em> before and after logging in using the one time password.
 The pid changes, the file is regenerated and created. Which means it looses its SELinux context, and ruin the whole plan.</p>
 <p>SELinux doesn’t really care about file paths. I don't know if there is anyway to have a file getting it's default context like we want here, without putting it in another folder firs and make a rule that says "every file created in this folder should get our_context_t". New files created in your home folder will get the user_home_t context, which is NOT something we want sshd to have full control over. That would break the whole idea…</p>
+<p>Update 18. Nov 2012:
+Look at the section <em>We can use plan A after all</em> to solve this problem without going to plan B.</p>
 <h2>Plan B</h2>
 <p>We already know that /home/username/.ssh is a folder that acts the way we want. So our plan b is to put our .google_authenticator file in that instead.</p>
 <p>In the <a href="http://google-authenticator.googlecode.com/git/libpam/README">google authenticator libpam README</a>, it said that we can manually set the location of the secret. Looks like our solution is simpler than first thought.</p>
@@ -322,6 +324,20 @@ The pid changes, the file is regenerated and created. Which means it looses its 
 
 <p>That’s all, it should now work perfectly in harmony with SELinux, even without our newly created module!
 This solution will for obvious reasons not work with the root user, because of the home path. But you should disable root login anyway. Use sudo!</p>
+<h2>We can use plan A after all (update 18. Nov 2012)</h2>
+<p>Thanks to Matthew Ife (#MatthewIfe) for pointing out this tip in the comment section.</p>
+<p>If we use filetrans_pattern (which is available from Fedora 15+) we can get around the relabelling problem fairly elegant.
+Add</p>
+<div class="codehilite"><pre><span class="n">filetrans_pattern</span><span class="p">(</span><span class="n">sshd_t</span><span class="p">,</span> <span class="n">user_home_dir_t</span><span class="p">,</span> <span class="n">sshd_google_authenticator_t</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> &quot;<span class="p">.</span><span class="n">google_authenticator</span>&quot;<span class="p">)</span>
+</pre></div>
+
+
+<p>To the button of your .te file, and it will make sure that all files that all files <em>sshd_t</em> creates in the folder with the type <em>user_home_dir_t</em> named <em>.google_authenticator</em> is labeled <em>sshd_google_authenticator_t</em>. This is just what we want!</p>
+<p>If you do this, remember to</p>
+<ul>
+<li>Don't add the secret option to pam.d</li>
+<li>Add <em>type user_home_dir_t;</em> to the require {} section of your .te file.</li>
+</ul>
 <h2>One extra paranoid tip</h2>
 <p>Arguably, having the user access to the .google_authenticator file is a security risk. Since an attacker can steal or change the secret if they are able to get to your logged in terminal.
 Sure, but then you have already lost. But if you are using this for only one user, and want this extra paranoid setup. Check out <a href="https://www.axivo.com/community/threads/secure-two-step-google-auth-login-in-centos.174/">this blog post at axivo</a>, specially the <em>Dark side</em> part..</p></div>
@@ -433,31 +449,31 @@ That being said, having a nice interface to write SELinux policies in will be mo
 <ul class="nav nav-list">
 <li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
 
-    <span class="tag-4"><a href=".././tag/blog.html">blog</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-1"><a href=".././tag/selinux.html">selinux</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-4"><a href=".././tag/pelican.html">pelican</a>&nbsp;&nbsp;</span>
+    <span class="tag-4"><a href=".././tag/ssh.html">ssh</a>&nbsp;&nbsp;</span>
 
 
     <span class="tag-1"><a href=".././tag/python.html">python</a>&nbsp;&nbsp;</span>
 
 
-    <span class="tag-4"><a href=".././tag/git.html">git</a>&nbsp;&nbsp;</span>
-
-
-    <span class="tag-4"><a href=".././tag/network.html">network</a>&nbsp;&nbsp;</span>
+    <span class="tag-4"><a href=".././tag/blog.html">blog</a>&nbsp;&nbsp;</span>
 
 
     <span class="tag-1"><a href=".././tag/linux.html">linux</a>&nbsp;&nbsp;</span>
 
 
-    <span class="tag-4"><a href=".././tag/ssh.html">ssh</a>&nbsp;&nbsp;</span>
-
-
     <span class="tag-4"><a href=".././tag/github.html">github</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/pelican.html">pelican</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/network.html">network</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-1"><a href=".././tag/selinux.html">selinux</a>&nbsp;&nbsp;</span>
+
+
+    <span class="tag-4"><a href=".././tag/git.html">git</a>&nbsp;&nbsp;</span>
 
 
 </ul></div>

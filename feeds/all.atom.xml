@@ -142,6 +142,8 @@ The good one; you now hopefully know how to create your own basic modules for wh
 We can verify that the file is replaced with a new one looking at the inode on the file. &lt;em&gt;ls -li /home/username/.google_authenticator&lt;/em&gt; before and after logging in using the one time password.
 The pid changes, the file is regenerated and created. Which means it looses its SELinux context, and ruin the whole plan.&lt;/p&gt;
 &lt;p&gt;SELinux doesn’t really care about file paths. I don't know if there is anyway to have a file getting it's default context like we want here, without putting it in another folder firs and make a rule that says "every file created in this folder should get our_context_t". New files created in your home folder will get the user_home_t context, which is NOT something we want sshd to have full control over. That would break the whole idea…&lt;/p&gt;
+&lt;p&gt;Update 18. Nov 2012:
+Look at the section &lt;em&gt;We can use plan A after all&lt;/em&gt; to solve this problem without going to plan B.&lt;/p&gt;
 &lt;h2&gt;Plan B&lt;/h2&gt;
 &lt;p&gt;We already know that /home/username/.ssh is a folder that acts the way we want. So our plan b is to put our .google_authenticator file in that instead.&lt;/p&gt;
 &lt;p&gt;In the &lt;a href="http://google-authenticator.googlecode.com/git/libpam/README"&gt;google authenticator libpam README&lt;/a&gt;, it said that we can manually set the location of the secret. Looks like our solution is simpler than first thought.&lt;/p&gt;
@@ -152,6 +154,20 @@ The pid changes, the file is regenerated and created. Which means it looses its 
 
 &lt;p&gt;That’s all, it should now work perfectly in harmony with SELinux, even without our newly created module!
 This solution will for obvious reasons not work with the root user, because of the home path. But you should disable root login anyway. Use sudo!&lt;/p&gt;
+&lt;h2&gt;We can use plan A after all (update 18. Nov 2012)&lt;/h2&gt;
+&lt;p&gt;Thanks to Matthew Ife (#MatthewIfe) for pointing out this tip in the comment section.&lt;/p&gt;
+&lt;p&gt;If we use filetrans_pattern (which is available from Fedora 15+) we can get around the relabelling problem fairly elegant.
+Add&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;filetrans_pattern&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sshd_t&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;user_home_dir_t&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sshd_google_authenticator_t&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;file&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &amp;quot;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;google_authenticator&lt;/span&gt;&amp;quot;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To the button of your .te file, and it will make sure that all files that all files &lt;em&gt;sshd_t&lt;/em&gt; creates in the folder with the type &lt;em&gt;user_home_dir_t&lt;/em&gt; named &lt;em&gt;.google_authenticator&lt;/em&gt; is labeled &lt;em&gt;sshd_google_authenticator_t&lt;/em&gt;. This is just what we want!&lt;/p&gt;
+&lt;p&gt;If you do this, remember to&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Don't add the secret option to pam.d&lt;/li&gt;
+&lt;li&gt;Add &lt;em&gt;type user_home_dir_t;&lt;/em&gt; to the require {} section of your .te file.&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2&gt;One extra paranoid tip&lt;/h2&gt;
 &lt;p&gt;Arguably, having the user access to the .google_authenticator file is a security risk. Since an attacker can steal or change the secret if they are able to get to your logged in terminal.
 Sure, but then you have already lost. But if you are using this for only one user, and want this extra paranoid setup. Check out &lt;a href="https://www.axivo.com/community/threads/secure-two-step-google-auth-login-in-centos.174/"&gt;this blog post at axivo&lt;/a&gt;, specially the &lt;em&gt;Dark side&lt;/em&gt; part..&lt;/p&gt;</summary><category term="linux"></category><category term="selinux"></category><category term="ssh"></category></entry><entry><title>SELinux - Finding info</title><link href="http://blog.boa.nu/2012/11/selinux-finding-info.html" rel="alternate"></link><updated>2012-11-13T12:00:00+01:00</updated><author><name>Lars Solberg</name></author><id>tag:blog.boa.nu,2012-11-13:2012/11/selinux-finding-info.html</id><summary type="html">&lt;p&gt;If you look around the interwebs for &lt;a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux"&gt;SELinux&lt;/a&gt; information you will probably look around for a while and after some hours you will ask yourself why most of it is from 2006.
